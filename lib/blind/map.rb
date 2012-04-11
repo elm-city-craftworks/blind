@@ -2,7 +2,7 @@ module Blind
   class Map
     Location = Struct.new(:x, :y)
 
-    def initialize
+    def initialize(width, height)
       @objects = {}
     end
 
@@ -17,6 +17,10 @@ module Blind
     def move(name, dx, dy)
       x, y = @objects[name]
       @objects[name] = [x + dx, y + dy]
+    end
+
+    def within_bounds?(name)
+      true
     end
   end
 end
