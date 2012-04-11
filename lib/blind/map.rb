@@ -14,9 +14,9 @@ module Blind
       Location.new(*@objects[name])
     end
 
-    def move(name, x,y)
-      xo, yo = @objects[name]
-      @objects[name] = [xo + x, yo + y]
+    def move(name, dx, dy)
+      x, y = @objects[name]
+      @objects[name] = [x + dx, y + dy]
     end
   end
 end
