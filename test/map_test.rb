@@ -31,18 +31,20 @@ describe Blind::Map do
     map.place(inbounds_player, 10, 25)
     map.must_be(:within_bounds?, inbounds_player)
 
-    map.place(outbounds_player, -1, 10)
-    map.wont_be(:within_bounds?, outbounds_player)
+    [[4,50],[50,4],[50,96],[96,50]].each do |x,y|
+      map.place(outbounds_player, x, y)
+      map.wont_be(:within_bounds?, outbounds_player)
+    end
   end
 
   private
 
-  def new_element(name, width=10, length=10)
-    Blind::Element.new(:name => name, :width => width, :length => length)
+  def new_element(name, width=10, height=10)
+    Blind::Element.new(:name => name, :width => width, :height => height)
   end
 
-  def new_map(width=100, length=100)
-    Blind::Map.new(width, length)
+  def new_map(width=100, height=100)
+    Blind::Map.new(width, height)
   end
   
 end

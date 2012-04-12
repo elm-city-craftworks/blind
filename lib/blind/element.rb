@@ -1,9 +1,9 @@
 module Blind
   class Element
     def initialize(params)
-      @name, @width, @length = params.values_at(:name, :width, :length)
+      @name, @width, @height = params.values_at(:name, :width, :height)
     end
     
-    attr_reader :name, :width, :length
+    attr_reader :name, :width, :height
   end
 end

@@ -1,32 +1,36 @@
 require_relative "element"
+require "ray"
 
 module Blind
   class Map
     Location = Struct.new(:x, :y)
 
-    def initialize(width, length)
+    def initialize(width, height)
       @width   = width
-      @length  = length
+      @height  = height
       @objects = {}
     end
 
-    def place(name, x, y)
-      @objects[name] = [x,y]
+    def place(element, x, y)
+      @objects[element] = x,y
     end
 
-    def locate(name)
-      Location.new(*@objects[name])
+    def locate(element)
+      Location.new(*@objects[element])
     end
 
-    def move(name, dx, dy)
-      x, y = @objects[name]
-      @objects[name] = [x + dx, y + dy]
+    def move(element, dx, dy)
+      x, y = @objects[element]
+      @objects[element] = [x + dx, y + dy]
     end
 
-    def within_bounds?(name)
-      x, y = @objects[name]
+    def within_bounds?(element)
+      x, y = @objects[element]
+      w, h = element.width, element.height
 
-      (0..@width).include?(x) && (0..@length).include?(y)
+      rect = [x-w/2,y-h/2, w, h].to_rect
+
+      rect.inside?([0,0,@width,@height].to_rect)
     end
   end
 end
