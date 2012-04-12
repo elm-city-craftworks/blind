@@ -1,8 +1,12 @@
+require_relative "element"
+
 module Blind
   class Map
     Location = Struct.new(:x, :y)
 
-    def initialize(width, height)
+    def initialize(width, length)
+      @width   = width
+      @length  = length
       @objects = {}
     end
 
@@ -20,7 +24,9 @@ module Blind
     end
 
     def within_bounds?(name)
-      true
+      x, y = @objects[name]
+
+      (0..@width).include?(x) && (0..@length).include?(y)
     end
   end
 end
