@@ -18,8 +18,12 @@ describe Blind::Game do
     dead = false
 
     game.on_event(:out_of_bounds) { dead = true }
-    game.move_player(-5,0)
 
+    # FIXME: Remove magic numbers
+    game.move_player(-game.player_position.x + 5, 0)
+    dead.must_equal(false)
+
+    game.move_player(-1, 0)
     dead.must_equal(true)
   end
 end

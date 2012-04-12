@@ -10,10 +10,11 @@ module Blind
       @map    = Blind::Map.new(100,100)         
 
       @player  = Blind::Element.new(:name   => "player",
-                                   :width  => 10,
-                                   :height => 10)
+                                    :width  => 10,
+                                    :height => 10)
 
-      @map.place(@player, 0, 0)
+      @map.place(@player, rand(@player.width/2..100-@player.width/2),
+                          rand(@player.height/2..100-@player.height/2))
     end
 
     def move_player(dx, dy)
