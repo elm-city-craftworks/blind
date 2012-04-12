@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'ray'
+require_relative "../lib/blind/game"
+
+Ray.game "Blind" do
+  register { add_hook :quit, method(:exit!) }
+
+  scene :main do
+    self.frames_per_second = 10
+
+    @game = Blind::Game.new
+    @game.on_event(:out_of_bounds) do
+      beep = sound("#{File.dirname(__FILE__)}/../data/beep.wav")
+      beep.play
+      sleep beep.duration
+
+      exit! 
+    end
+
+    always do
+      puts @game.player_position
+
+      @game.move_player(0,-1) if holding?(:w) 
+      @game.move_player(0,1)  if holding?(:s)
+      @game.move_player(-1,0) if holding?(:a)
+      @game.move_player(1,0)  if holding?(:d)
+    end
+  end
+
+  scenes << :main
+end
+
