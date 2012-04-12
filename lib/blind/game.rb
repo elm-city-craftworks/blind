@@ -1,24 +1,35 @@
 require "ray"
 
+require_relative "map"
+require_relative "element"
+
 module Blind
   class Game
     def initialize
-      @events          = Hash.new { ->() {} }
-      @player_position = Ray::Vector2.new(0,0)
+      @events = Hash.new { ->() {} }
+      @map    = Blind::Map.new(100,100)         
+
+      @player  = Blind::Element.new(:name   => "player",
+                                   :width  => 10,
+                                   :height => 10)
+
+      @map.place(@player, 0, 0)
     end
 
-    attr_reader :player_position, :events
-
     def move_player(dx, dy)
-      @player_position += [dx, dy] 
+      @map.move(@player, dx, dy)
 
-      if @player_position.x < 0 || @player_position.y < 0
-        events[:out_of_bounds].call
+      unless @map.within_bounds?(@player)
+        @events[:out_of_bounds].call
       end
     end
 
+    def player_position
+      @map.locate(@player)
+    end
+
     def on_event(event_name, &block)
-      events[:out_of_bounds] = block
+      @events[:out_of_bounds] = block
     end
   end
 end

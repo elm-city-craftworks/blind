@@ -3,8 +3,6 @@ require "ray"
 
 module Blind
   class Map
-    Location = Struct.new(:x, :y)
-
     def initialize(width, height)
       @width   = width
       @height  = height
@@ -16,7 +14,7 @@ module Blind
     end
 
     def locate(element)
-      Location.new(*@objects[element])
+      Ray::Vector2.new(*@objects[element])
     end
 
     def move(element, dx, dy)
