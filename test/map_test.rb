@@ -23,7 +23,7 @@ describe Blind::Map do
   end
 
   it "must be able to detect out of bounds objects" do
-    map    = new_map
+    map = new_map
 
     inbounds_player  = new_element("player 1")
     outbounds_player = new_element("player 2")
@@ -35,6 +35,16 @@ describe Blind::Map do
       map.place(outbounds_player, x, y)
       map.wont_be(:within_bounds?, outbounds_player)
     end
+  end
+
+  it "must be able to detect collisions" do
+    map = new_map
+
+    element1 = new_element("e1")
+    element2 = new_element("e2")
+    map.place(element1, 10, 10)
+    map.place(element2, 30, 30)
+    map.collisions(element1).wont_be(:any?)
   end
 
   private

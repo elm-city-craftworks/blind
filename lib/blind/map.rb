@@ -24,6 +24,10 @@ module Blind
       @objects[element] = [x + dx, y + dy]
     end
 
+    def collisions(element)
+      []
+    end
+
     def within_bounds?(element)
       x, y = @objects[element]
       w, h = element.width, element.height
