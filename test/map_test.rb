@@ -45,6 +45,13 @@ describe Blind::Map do
     map.place(element1, 10, 10)
     map.place(element2, 30, 30)
     map.collisions(element1).wont_be(:any?)
+
+    map.move(element1, 15, 15)
+    map.collisions(element1).must_equal [element2]
+
+    element3 = new_element("e3")
+    map.place(element3, 23, 22)
+    map.collisions(element1).must_equal [element2, element3]
   end
 
   private

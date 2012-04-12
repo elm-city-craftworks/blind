@@ -12,7 +12,7 @@ module Blind
     end
 
     def place(element, x, y)
-      @objects[element] = x,y
+      @objects[element] = [x, y]
     end
 
     def locate(element)
@@ -25,16 +25,23 @@ module Blind
     end
 
     def collisions(element)
-      []
+      (@objects.keys - [element]).select do |k|
+        to_rect(element).collide?(to_rect(k))
+      end
     end
 
     def within_bounds?(element)
+      rect = to_rect(element)
+      rect.inside?([0,0,@width,@height].to_rect)
+    end
+
+    private
+
+    def to_rect(element)
       x, y = @objects[element]
       w, h = element.width, element.height
 
-      rect = [x-w/2,y-h/2, w, h].to_rect
-
-      rect.inside?([0,0,@width,@height].to_rect)
+      [x-w/2,y-h/2, w, h].to_rect      
     end
   end
 end
