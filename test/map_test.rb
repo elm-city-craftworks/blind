@@ -37,6 +37,19 @@ describe Blind::Map do
     end
   end
 
+  it "must be able to detect minimum distance from boundaries" do
+    map = new_map
+
+    player = new_element("player 1")
+    
+    map.place(player, 10, 25)
+
+    map.nearest_boundary(player).must_equal(5)
+
+    map.move(player, 0, -18)
+    map.nearest_boundary(player).must_equal(2)
+  end
+
   it "must be able to detect collisions" do
     map = new_map
 

@@ -18,6 +18,10 @@ Ray.game "Blind" do
       exit! 
     end
 
+    render do |win|
+      win.text("Hello world")
+    end
+
     always do
       puts @game.player_position
 

@@ -28,6 +28,15 @@ module Blind
       end
     end
 
+    def nearest_boundary(element)
+      pos = locate(element) 
+
+      [(@width - pos.x) + element.width / 2,
+        pos.x - (element.width / 2),
+        (@height - pos.y) + element.height / 2,
+        pos.y - (element.width / 2)].min
+    end
+
     def within_bounds?(element)
       rect = to_rect(element)
       rect.inside?([0,0,@width,@height].to_rect)
