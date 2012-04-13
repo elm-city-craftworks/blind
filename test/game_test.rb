@@ -30,7 +30,7 @@ describe Blind::Game do
   it "must place several mines" do
     game = Blind::Game.new
 
-    game.mines.count.must_equal(5)
+    game.mines.count.must_equal(10)
   end
 
   it "must kill the player when colliding with a mine" do
@@ -41,7 +41,7 @@ describe Blind::Game do
 
     danger_zone = game.mine_positions[0]
     
-    game.move_player(-game.player_position.x + danger_zone.x-3, 
+    game.move_player(-game.player_position.x + danger_zone.x-6, 
                      -game.player_position.y + danger_zone.y)
 
     dead.must_equal(false)

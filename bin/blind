@@ -75,7 +75,7 @@ Ray.game "Blind" do
 
     render do |win|
       if @text
-        win.draw(text(@text), :size => 20)
+        win.draw(text(@text, :size => 20))
       else
         if $DEBUG
           win.draw text("Player position #{@game.player_position}\n"+

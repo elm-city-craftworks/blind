@@ -16,10 +16,10 @@ module Blind
       @map.place(@player, rand(@player.width/2..100-@player.width/2),
                           rand(@player.height/2..100-@player.height/2))
 
-      @mines = (1..5).map do |i|
+      @mines = (1..10).map do |i|
         mine = Blind::Element.new(:name   => "mine #{i}",
-                                  :width  => 5,
-                                  :height => 5)
+                                  :width  => 10,
+                                  :height => 10)
         @map.place(mine, rand(mine.width/2..100-mine.width/2),
                          rand(mine.height/2..100-mine.height/2))
 
