@@ -19,6 +19,11 @@ Ray.game "Blind" do
     @horn.looping = true
     @horn.volume = 0
 
+    @phone = sound("#{File.dirname(__FILE__)}/../data/telephone.wav")
+    @phone.looping = true
+    @phone.play
+    @phone.position = [@game.exit_position.x, @game.exit_position.y, 0]
+
     step = 0.2
 
     @mines = @game.mine_positions.map do |pos| 
@@ -28,43 +33,51 @@ Ray.game "Blind" do
       s.pitch    = step + rand(0.1)
       step += 0.1
 
-      s.min_distance = 0
       s.play
-    end
 
+      s
+    end
 
     @game.on_event(:out_of_bounds) do
       @horn.stop
       @mines.each { |m| m.stop }
+      @phone.stop
 
       blast = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
       blast.play
-      sleep blast.duration
 
-      exit! 
+      @text = "You fell off the world! YOU LOSE!"
     end
 
     @game.on_event(:mine_collision) do
       @horn.stop
       @mines.each { |m| m.stop }
+      @phone.stop
      
       blast = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
       blast.play
-      sleep blast.duration
-
-      exit! 
+       
+      @text = "You were blown up by a mine! YOU LOSE!"
     end
 
     @game.on_event(:exit_located) do
       @horn.stop
       @mines.each { |m| m.stop }
+      @phone.stop
 
-      exit!
+      win = sound("#{File.dirname(__FILE__)}/../data/win.wav")
+      win.play
+
+      @text = "You found the exit! GOOD JOB BUDDY!"
     end
 
     render do |win|
-      win.draw text("Player position #{@game.player_position}; "+
-                    "risk #{@game.escape_risk(20)}; exit #{@game.exit_position}")
+      if @text
+        win.draw(text(@text))
+      else
+        win.draw text("Player position #{@game.player_position}; "+
+                      "risk #{@game.escape_risk(20)}; exit #{@game.exit_position}")
+      end
     end
 
     always do
