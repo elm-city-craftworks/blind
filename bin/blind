@@ -9,24 +9,31 @@ Ray.game "Blind" do
   scene :main do
     self.frames_per_second = 10
 
+    @horn = sound("#{File.dirname(__FILE__)}/../data/horn.wav")
+    @horn.play
+    @horn.looping = true
+    @horn.volume = 0
+
     @game = Blind::Game.new
     @game.on_event(:out_of_bounds) do
-      beep = sound("#{File.dirname(__FILE__)}/../data/beep.wav")
+      beep = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
       beep.play
-      sleep beep.duration
+      sleep beep.duration + 10
 
       exit! 
     end
 
     render do |win|
-      win.draw text("Player position #{@game.player_position}")
+      win.draw text("Player position #{@game.player_position}; risk #{@game.escape_risk(20)}")
     end
 
     always do
-      @game.move_player(0,-1) if holding?(:w) 
-      @game.move_player(0,1)  if holding?(:s)
-      @game.move_player(-1,0) if holding?(:a)
-      @game.move_player(1,0)  if holding?(:d)
+      @horn.volume = @game.escape_risk(20) * 100
+
+      @game.move_player(0,-0.5) if holding?(:w) 
+      @game.move_player(0,0.5)  if holding?(:s)
+      @game.move_player(-0.5,0) if holding?(:a)
+      @game.move_player(0.5,0)  if holding?(:d)
     end
   end
 
