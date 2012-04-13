@@ -42,12 +42,22 @@ describe Blind::Map do
 
     player = new_element("player 1")
     
+    # starting at (10,25)
     map.place(player, 10, 25)
 
     map.nearest_boundary(player).must_equal(5)
 
+    # now at (10, 7)
     map.move(player, 0, -18)
     map.nearest_boundary(player).must_equal(2)
+
+    # now at (10, 91)
+    map.move(player, 0, 84) 
+    map.nearest_boundary(player).must_equal(4)
+
+    # now at (92, 91)
+    map.move(player, 82, 0)
+    map.nearest_boundary(player).must_equal(3)
   end
 
   it "must be able to detect collisions" do
