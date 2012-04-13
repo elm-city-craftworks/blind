@@ -27,6 +27,29 @@ describe Blind::Game do
     dead.must_equal(true)
   end
 
+  it "must place several mines" do
+    game = Blind::Game.new
+
+    game.mines.count.must_equal(5)
+  end
+
+  it "must kill the player when colliding with a mine" do
+    game = Blind::Game.new
+    dead = false
+
+    game.on_event(:mine_collision) { dead = true }
+
+    danger_zone = game.mine_positions[0]
+    
+    game.move_player(-game.player_position.x + danger_zone.x-10, 
+                     -game.player_position.y + danger_zone.y)
+
+    dead.must_equal(false)
+
+    game.move_player(1,0)
+    dead.must_equal(true)
+  end
+
   it "must be able to determine escape_risk" do
     game = Blind::Game.new
 
