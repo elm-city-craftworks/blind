@@ -20,7 +20,7 @@ describe Blind::Game do
     game.on_event(:out_of_bounds) { dead = true }
 
     # FIXME: Remove magic numbers
-    game.move_player(-game.player_position.x + 5, 0)
+    game.move_player(-game.player_position.x + 0.5, 0)
     dead.must_equal(false)
 
     game.move_player(-1, 0)
@@ -41,7 +41,7 @@ describe Blind::Game do
 
     danger_zone = game.mine_positions[0]
     
-    game.move_player(-game.player_position.x + danger_zone.x-10, 
+    game.move_player(-game.player_position.x + danger_zone.x-3, 
                      -game.player_position.y + danger_zone.y)
 
     dead.must_equal(false)
@@ -50,12 +50,27 @@ describe Blind::Game do
     dead.must_equal(true)
   end
 
+  it "must finish in a win when the player finds the exit" do
+    game = Blind::Game.new
+    win  = false
+
+    game.on_event(:exit_located) { win = true }
+
+    game.move_player(-game.player_position.x + game.exit_position.x,
+                     -game.player_position.y + game.exit_position.y - 1.5)
+
+    win.must_equal(false)
+
+    game.move_player(0,1)
+    win.must_equal(true)
+  end
+
   it "must be able to determine escape_risk" do
     game = Blind::Game.new
 
     # FIXME: Remove magic numbers
-    game.move_player(-game.player_position.x + 6,
-                     -game.player_position.y + 7)
+    game.move_player(-game.player_position.x + 1,
+                     -game.player_position.y + 2)
 
     game.escape_risk(10).must_equal(0.9)
 

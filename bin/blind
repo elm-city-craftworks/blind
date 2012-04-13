@@ -9,14 +9,34 @@ Ray.game "Blind" do
   scene :main do
     self.frames_per_second = 10
 
+
+    s = sound("#{File.dirname(__FILE__)}/../data/beep.wav")
+
+    @game = Blind::Game.new
+
     @horn = sound("#{File.dirname(__FILE__)}/../data/horn.wav")
     @horn.play
     @horn.looping = true
     @horn.volume = 0
 
-    @game = Blind::Game.new
+    step = 0.2
+
+    @mines = @game.mine_positions.map do |pos| 
+      s          = sound("#{File.dirname(__FILE__)}/../data/beep.wav")
+      s.pos      = [pos.x, pos.y, 1]
+      s.looping  = true
+      s.pitch    = step + rand(0.1)
+      step += 0.1
+
+      s.min_distance = 0
+      s.play
+    end
+
+
     @game.on_event(:out_of_bounds) do
       @horn.stop
+      @mines.each { |m| m.stop }
+
       blast = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
       blast.play
       sleep blast.duration
@@ -24,17 +44,38 @@ Ray.game "Blind" do
       exit! 
     end
 
+    @game.on_event(:mine_collision) do
+      @horn.stop
+      @mines.each { |m| m.stop }
+     
+      blast = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
+      blast.play
+      sleep blast.duration
+
+      exit! 
+    end
+
+    @game.on_event(:exit_located) do
+      @horn.stop
+      @mines.each { |m| m.stop }
+
+      exit!
+    end
+
     render do |win|
-      win.draw text("Player position #{@game.player_position}; risk #{@game.escape_risk(20)}")
+      win.draw text("Player position #{@game.player_position}; "+
+                    "risk #{@game.escape_risk(20)}; exit #{@game.exit_position}")
     end
 
     always do
       @horn.volume = @game.escape_risk(20) * 100
 
-      @game.move_player(0,-0.1) if holding?(:w) 
-      @game.move_player(0,0.1)  if holding?(:s)
-      @game.move_player(-0.1,0) if holding?(:a)
-      @game.move_player(0.1,0)  if holding?(:d)
+      @game.move_player(0,-0.2) if holding?(:w) 
+      @game.move_player(0,0.2)  if holding?(:s)
+      @game.move_player(-0.2,0) if holding?(:a)
+      @game.move_player(0.2,0)  if holding?(:d)
+
+      Ray::Audio.pos = [@game.player_position.x, @game.player_position.y, 0]
     end
   end
 

@@ -10,24 +10,35 @@ module Blind
       @map    = Blind::Map.new(100,100)         
 
       @player  = Blind::Element.new(:name   => "player",
-                                    :width  => 10,
-                                    :height => 10)
+                                    :width  => 1,
+                                    :height => 1)
 
       @map.place(@player, rand(@player.width/2..100-@player.width/2),
                           rand(@player.height/2..100-@player.height/2))
 
       @mines = (1..5).map do |i|
         mine = Blind::Element.new(:name   => "mine #{i}",
-                                  :width  => 10,
-                                  :height => 10)
+                                  :width  => 5,
+                                  :height => 5)
         @map.place(mine, rand(mine.width/2..100-mine.width/2),
                          rand(mine.height/2..100-mine.height/2))
 
         mine
       end
+
+      @exit = Blind::Element.new(:name   => "exit",
+                                 :width  => 1,
+                                 :height => 1)
+
+      @map.place(@exit, rand((@exit.width/2  + 20)..(100-@exit.width/2 - 20)),
+                        rand((@exit.height/2 + 20)..(100-@exit.width/2 - 20)))
     end
 
     attr_reader :mines
+
+    def exit_position
+      @map.locate(@exit)
+    end
 
     def move_player(dx, dy, sigil=false)
       @map.move(@player, dx, dy)
@@ -36,8 +47,12 @@ module Blind
         @events[:out_of_bounds].call
       end
 
-      if @map.collisions(@player).any?
+      if (@map.collisions(@player) & @mines).any?
         @events[:mine_collision].call
+      end
+
+      if @map.collisions(@player).include?(@exit)
+        @events[:exit_located].call
       end
     end
 
