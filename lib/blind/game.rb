@@ -25,6 +25,13 @@ module Blind
       end
     end
 
+    def escape_risk(margin_size)
+      return 1 unless @map.within_bounds?(@player)
+      return 0 if @map.nearest_boundary(@player) > margin_size
+      
+      1 - @map.nearest_boundary(@player) / margin_size.to_f
+    end
+
     def player_position
       @map.locate(@player)
     end

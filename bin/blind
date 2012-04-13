@@ -19,12 +19,10 @@ Ray.game "Blind" do
     end
 
     render do |win|
-      win.text("Hello world")
+      win.draw text("Player position #{@game.player_position}")
     end
 
     always do
-      puts @game.player_position
-
       @game.move_player(0,-1) if holding?(:w) 
       @game.move_player(0,1)  if holding?(:s)
       @game.move_player(-1,0) if holding?(:a)
