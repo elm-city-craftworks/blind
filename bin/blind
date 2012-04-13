@@ -16,9 +16,10 @@ Ray.game "Blind" do
 
     @game = Blind::Game.new
     @game.on_event(:out_of_bounds) do
-      beep = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
-      beep.play
-      sleep beep.duration + 10
+      @horn.stop
+      blast = sound("#{File.dirname(__FILE__)}/../data/grenade.wav")
+      blast.play
+      sleep blast.duration
 
       exit! 
     end
@@ -30,10 +31,10 @@ Ray.game "Blind" do
     always do
       @horn.volume = @game.escape_risk(20) * 100
 
-      @game.move_player(0,-0.5) if holding?(:w) 
-      @game.move_player(0,0.5)  if holding?(:s)
-      @game.move_player(-0.5,0) if holding?(:a)
-      @game.move_player(0.5,0)  if holding?(:d)
+      @game.move_player(0,-0.1) if holding?(:w) 
+      @game.move_player(0,0.1)  if holding?(:s)
+      @game.move_player(-0.1,0) if holding?(:a)
+      @game.move_player(0.1,0)  if holding?(:d)
     end
   end
 
