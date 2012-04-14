@@ -42,11 +42,11 @@ module Blind
         @events[:out_of_bounds].call
       end
 
-      if (@map.collisions(@player) & @mines).any?
+      if @mines.any? { |e| e.collide?(@player) }
         @events[:mine_collision].call
       end
 
-      if @map.collisions(@player).include?(@exit)
+      if @player.collide?(@exit)
         @events[:exit_located].call
       end
     end

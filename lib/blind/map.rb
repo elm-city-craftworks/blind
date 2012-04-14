@@ -9,7 +9,8 @@ module Blind
     end
 
     def []=(element, position)
-      @objects[element] = *position
+      element.position  = position
+      @objects[element] = position
     end
 
     def [](element)
@@ -18,13 +19,7 @@ module Blind
 
     def move(element, dx, dy)
       x, y = @objects[element]
-      @objects[element] = [x + dx, y + dy]
-    end
-
-    def collisions(element)
-      (@objects.keys - [element]).select do |k|
-        to_rect(element).collide?(to_rect(k))
-      end
+      @objects[element] = element.position = [x + dx, y + dy]
     end
 
     def nearest_boundary(element)

@@ -62,24 +62,6 @@ describe Blind::Map do
     map.nearest_boundary(player).must_equal(3)
   end
 
-  it "must be able to detect collisions" do
-    map = new_map
-
-    element1 = new_element("e1")
-    element2 = new_element("e2")
-
-    map[element1] = [10, 10]
-    map[element2]  = [30, 30]
-    map.collisions(element1).wont_be(:any?)
-
-    map.move(element1, 15, 15)
-    map.collisions(element1).must_equal [element2]
-
-    element3 = new_element("e3")
-    map[element3] = [23, 22]
-    map.collisions(element1).must_equal [element2, element3]
-  end
-
   private
 
   def new_element(name, size=10)
