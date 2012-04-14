@@ -79,7 +79,7 @@ Ray.game "Blind" do
         if $DEBUG
           win.draw text("Player position #{@game.player_position}\n"+
                         "risk of escape #{@game.escape_risk(20)}\n"+
-                        "mine positions #{@game.mine_positions}\n"+
+                        "mine positions\n#{@game.mine_positions.join("\n")}\n"+
                         "exit #{@game.exit_position}", :size => 20)
         else
           win.draw text("Find the phone.\nAvoid the beeping mines and the sirens.\nUse WASD to move",
