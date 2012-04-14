@@ -1,4 +1,3 @@
-require_relative "element"
 require "ray"
 
 module Blind
@@ -29,12 +28,13 @@ module Blind
     end
 
     def nearest_boundary(element)
-      pos = locate(element) 
+      pos  = locate(element) 
+      rect = element.to_rect(pos.x, pos.y)
 
-      [@width - (pos.x + element.width / 2),
-        pos.x - (element.width / 2),
-        @height - (pos.y + element.height / 2),
-        pos.y - (element.height / 2)].min
+      top,    left  = rect.top_left.to_a
+      bottom, right = rect.bottom_right.to_a
+
+      [left, @width - right, top, @height - bottom].min
     end
 
     def within_bounds?(element)
@@ -46,9 +46,8 @@ module Blind
 
     def to_rect(element)
       x, y = @objects[element]
-      w, h = element.width, element.height
 
-      [x-w/2,y-h/2, w, h].to_rect      
+      element.to_rect(x,y)
     end
   end
 end

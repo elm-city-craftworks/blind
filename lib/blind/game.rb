@@ -9,29 +9,24 @@ module Blind
       @events = Hash.new { ->() {} }
       @map    = Blind::Map.new(100,100)         
 
-      @player  = Blind::Element.new(:name   => "player",
-                                    :width  => 1,
-                                    :height => 1)
+      @player  = Blind::Element.new(:name => "player", :size => 1)
 
-      @map.place(@player, rand(@player.width/2..100-@player.width/2),
-                          rand(@player.height/2..100-@player.height/2))
+
+      @map.place(@player, rand(@player.size/2..100-@player.size/2),
+                          rand(@player.size/2..100-@player.size/2))
 
       @mines = (1..10).map do |i|
-        mine = Blind::Element.new(:name   => "mine #{i}",
-                                  :width  => 10,
-                                  :height => 10)
-        @map.place(mine, rand(mine.width/2..100-mine.width/2),
-                         rand(mine.height/2..100-mine.height/2))
+        mine = Blind::Element.new(:name  => "mine #{i}", :size => 10)
+        @map.place(mine, rand(mine.size/2..100-mine.size/2),
+                         rand(mine.size/2..100-mine.size/2))
 
         mine
       end
 
-      @exit = Blind::Element.new(:name   => "exit",
-                                 :width  => 1,
-                                 :height => 1)
+      @exit = Blind::Element.new(:name   => "exit", :size => 1)
 
-      @map.place(@exit, rand((@exit.width/2  + 20)..(100-@exit.width/2 - 20)),
-                        rand((@exit.height/2 + 20)..(100-@exit.width/2 - 20)))
+      @map.place(@exit, rand((@exit.size/2  + 20)..(100-@exit.size/2 - 20)),
+                        rand((@exit.size/2 + 20)..(100-@exit.size/2 - 20)))
     end
 
     attr_reader :mines

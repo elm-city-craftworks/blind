@@ -1,4 +1,6 @@
 require_relative "helper"
+
+require_relative "../lib/blind/element"
 require_relative "../lib/blind/map"
 
 describe Blind::Map do
@@ -79,8 +81,8 @@ describe Blind::Map do
 
   private
 
-  def new_element(name, width=10, height=10)
-    Blind::Element.new(:name => name, :width => width, :height => height)
+  def new_element(name, size=10)
+    Blind::Element.new(:name => name, :size => size)
   end
 
   def new_map(width=100, height=100)

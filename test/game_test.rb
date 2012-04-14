@@ -69,8 +69,8 @@ describe Blind::Game do
     game = Blind::Game.new
 
     # FIXME: Remove magic numbers
-    game.move_player(-game.player_position.x + 1,
-                     -game.player_position.y + 2)
+    game.move_player(-game.player_position.x + 1.5,
+                     -game.player_position.y + 2.5)
 
     game.escape_risk(10).must_equal(0.9)
 
