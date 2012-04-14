@@ -3,7 +3,7 @@
 $VERBOSE=false
 
 require 'ray'
-require_relative "../lib/blind/game"
+require_relative "../lib/blind/world"
 
 Ray.game "Blind" do
   register { add_hook :quit, method(:exit!) }
