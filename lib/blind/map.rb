@@ -8,11 +8,11 @@ module Blind
       @objects = {}
     end
 
-    def place(element, x, y)
-      @objects[element] = [x, y]
+    def []=(element, position)
+      @objects[element] = *position
     end
 
-    def locate(element)
+    def [](element)
       Ray::Vector2.new(*@objects[element])
     end
 
@@ -28,7 +28,7 @@ module Blind
     end
 
     def nearest_boundary(element)
-      pos  = locate(element) 
+      pos  = self[element]
       rect = element.to_rect(pos.x, pos.y)
 
       top,    left  = rect.top_left.to_a

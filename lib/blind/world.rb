@@ -12,27 +12,27 @@ module Blind
       @player  = Blind::Element.new(:name => "player", :size => 1)
 
 
-      @map.place(@player, rand(@player.size/2..100-@player.size/2),
-                          rand(@player.size/2..100-@player.size/2))
+      @map[@player] = [rand(@player.size/2..100-@player.size/2),
+                       rand(@player.size/2..100-@player.size/2)]
 
       @mines = (1..mine_count).map do |i|
         mine = Blind::Element.new(:name  => "mine #{i}", :size => 10)
-        @map.place(mine, rand(mine.size/2..100-mine.size/2),
-                         rand(mine.size/2..100-mine.size/2))
+        @map[mine] = [rand(mine.size/2..100-mine.size/2),
+                      rand(mine.size/2..100-mine.size/2)]
 
         mine
       end
 
       @exit = Blind::Element.new(:name   => "exit", :size => 1)
 
-      @map.place(@exit, rand((@exit.size/2  + 20)..(100-@exit.size/2 - 20)),
-                        rand((@exit.size/2 + 20)..(100-@exit.size/2 - 20)))
+      @map[@exit] = [ rand((@exit.size/2 + 20)..(100-@exit.size/2 - 20)),
+                      rand((@exit.size/2 + 20)..(100-@exit.size/2 - 20))]
     end
 
     attr_reader :mines
 
     def exit_position
-      @map.locate(@exit)
+      @map[@exit]
     end
 
     def move_player(dx, dy)
@@ -59,11 +59,11 @@ module Blind
     end
 
     def mine_positions
-      @mines.map { |m| @map.locate(m) }
+      @mines.map { |m| @map[m] }
     end
 
     def player_position
-      @map.locate(@player)
+      @map[@player]
     end
 
     def on_event(event_name, &block)
