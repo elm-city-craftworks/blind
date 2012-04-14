@@ -3,14 +3,18 @@ require "ray"
 module Blind
   class Element
     def initialize(params)
-      @name, @size = params.values_at(:name, :size)
+      @name, @size, @position = params.values_at(:name, :size, :position)
     end
 
-    # we want to position things by their centers
-    def to_rect(x,y)
-      [x - size/2.0, y - size/2.0, size, size].to_rect
+    def to_rect
+      [position[0] - size/2.0, position[1] - size/2.0, size, size].to_rect
+    end
+
+    def collide?(other_element)
+      to_rect.collide?(other_element.to_rect)
     end
     
-    attr_reader :name, :size
+    attr_reader   :name, :size
+    attr_accessor :position
   end
 end

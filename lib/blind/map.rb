@@ -29,7 +29,8 @@ module Blind
 
     def nearest_boundary(element)
       pos  = self[element]
-      rect = element.to_rect(pos.x, pos.y)
+      element.position = pos.to_a
+      rect = element.to_rect
 
       top,    left  = rect.top_left.to_a
       bottom, right = rect.bottom_right.to_a
@@ -47,7 +48,8 @@ module Blind
     def to_rect(element)
       x, y = @objects[element]
 
-      element.to_rect(x,y)
+      element.position = [x,y]
+      element.to_rect
     end
   end
 end
