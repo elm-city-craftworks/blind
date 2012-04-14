@@ -4,7 +4,7 @@ require_relative "map"
 require_relative "element"
 
 module Blind
-  class Game
+  class World
     def initialize(mine_count)
       @events = Hash.new { ->() {} }
       @map    = Blind::Map.new(100,100)         

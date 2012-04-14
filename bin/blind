@@ -13,7 +13,7 @@ Ray.game "Blind" do
 
     s = sound("#{File.dirname(__FILE__)}/../data/beep.wav")
 
-    @game = Blind::Game.new(ARGV[0] ? ARGV[0].to_i : 10)
+    @game = Blind::World.new(ARGV[0] ? ARGV[0].to_i : 10)
 
     @horn = sound("#{File.dirname(__FILE__)}/../data/horn.wav")
     @horn.play

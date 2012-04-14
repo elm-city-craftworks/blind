@@ -1,7 +1,7 @@
 require_relative "helper"
-require_relative "../lib/blind/game"
+require_relative "../lib/blind/world"
 
-describe Blind::Game do
+describe Blind::World do
   it "must control player movement" do
     game = new_game
 
@@ -98,6 +98,6 @@ describe Blind::Game do
 
   # mines are disabled by default to prevent test failure
   def new_game(mines=0)
-    Blind::Game.new(mines)
+    Blind::World.new(mines)
   end
 end
