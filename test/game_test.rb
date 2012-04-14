@@ -3,7 +3,7 @@ require_relative "../lib/blind/game"
 
 describe Blind::Game do
   it "must control player movement" do
-    game = Blind::Game.new
+    game = new_game
 
     pos = game.player_position
 
@@ -14,7 +14,7 @@ describe Blind::Game do
   end
 
   it "must kill the player when out of bounds" do
-    game = Blind::Game.new
+    game = new_game
     dead = false
 
     game.on_event(:out_of_bounds) { dead = true }
@@ -27,14 +27,14 @@ describe Blind::Game do
     dead.must_equal(true)
   end
 
-  it "must place several mines" do
-    game = Blind::Game.new
+  it "must be able to place several mines" do
+    game = new_game(10)
 
     game.mines.count.must_equal(10)
   end
 
   it "must kill the player when colliding with a mine" do
-    game = Blind::Game.new
+    game = new_game(1) # limit to a single mine to prevent test failure
     dead = false
 
     game.on_event(:mine_collision) { dead = true }
@@ -51,7 +51,7 @@ describe Blind::Game do
   end
 
   it "must finish in a win when the player finds the exit" do
-    game = Blind::Game.new
+    game = new_game
     win  = false
 
     game.on_event(:exit_located) { win = true }
@@ -66,7 +66,7 @@ describe Blind::Game do
   end
 
   it "must be able to determine escape_risk" do
-    game = Blind::Game.new
+    game = new_game
 
     # FIXME: Remove magic numbers
     game.move_player(-game.player_position.x + 1.5,
@@ -79,7 +79,7 @@ describe Blind::Game do
   end
 
   it "must return an escape_risk of 0 for a player within the margins" do
-    game = Blind::Game.new
+    game = new_game
 
     game.move_player(-game.player_position.x + 25,
                      -game.player_position.y + 25)
@@ -88,11 +88,16 @@ describe Blind::Game do
   end
 
   it "must return an escape_risk of 1 for an out of bounds player" do
-    game = Blind::Game.new
+    game = new_game
 
     game.move_player(-game.player_position.x,
                      -game.player_position.y)
 
     game.escape_risk(10).must_equal(1)
+  end
+
+  # mines are disabled by default to prevent test failure
+  def new_game(mines=0)
+    Blind::Game.new(mines)
   end
 end

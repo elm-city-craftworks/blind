@@ -5,7 +5,7 @@ require_relative "element"
 
 module Blind
   class Game
-    def initialize
+    def initialize(mine_count)
       @events = Hash.new { ->() {} }
       @map    = Blind::Map.new(100,100)         
 
@@ -15,7 +15,7 @@ module Blind
       @map.place(@player, rand(@player.size/2..100-@player.size/2),
                           rand(@player.size/2..100-@player.size/2))
 
-      @mines = (1..10).map do |i|
+      @mines = (1..mine_count).map do |i|
         mine = Blind::Element.new(:name  => "mine #{i}", :size => 10)
         @map.place(mine, rand(mine.size/2..100-mine.size/2),
                          rand(mine.size/2..100-mine.size/2))
@@ -35,7 +35,7 @@ module Blind
       @map.locate(@exit)
     end
 
-    def move_player(dx, dy, sigil=false)
+    def move_player(dx, dy)
       @map.move(@player, dx, dy)
 
       unless @map.within_bounds?(@player)

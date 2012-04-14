@@ -11,10 +11,9 @@ Ray.game "Blind" do
   scene :main do
     self.frames_per_second = 10
 
-
     s = sound("#{File.dirname(__FILE__)}/../data/beep.wav")
 
-    @game = Blind::Game.new
+    @game = Blind::Game.new(ARGV[0] ? ARGV[0].to_i : 10)
 
     @horn = sound("#{File.dirname(__FILE__)}/../data/horn.wav")
     @horn.play
@@ -80,6 +79,7 @@ Ray.game "Blind" do
         if $DEBUG
           win.draw text("Player position #{@game.player_position}\n"+
                         "risk of escape #{@game.escape_risk(20)}\n"+
+                        "mine positions #{@game.mine_positions}\n"+
                         "exit #{@game.exit_position}", :size => 20)
         else
           win.draw text("Find the phone.\nAvoid the beeping mines and the sirens.\nUse WASD to move",
