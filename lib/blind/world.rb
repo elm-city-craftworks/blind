@@ -1,16 +1,18 @@
 require_relative "point"
 
-# possibly refactor to be a simple lookup
-# rather than doing point manipulation
-
 module Blind
   class World
     def initialize
       @center = Blind::Point.new(0,0) 
+      @player = Blind::Point.new(0,0)
     end
 
-    def region(point)
-      case point.distance(@center)
+    def move_to(x,y)
+      @player = Blind::Point.new(x,y)
+    end
+
+    def current_region
+      case @player.distance(@center)
       when 0...20
         :safe_zone
       when 20...100
