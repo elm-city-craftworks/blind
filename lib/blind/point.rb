@@ -22,6 +22,10 @@ module Blind
       distance(other).zero?
     end
 
+    def to_a
+      [x,y]
+    end
+
     protected
     
     attr_reader :data

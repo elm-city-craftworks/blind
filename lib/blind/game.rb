@@ -8,13 +8,17 @@ module Blind
     def move(dx, dy)
       x,y = world.current_position.to_a
 
-      region = world.move_to(x + dx, y + dy)
+      r1 = world.current_region
+      r2 = world.move_to(x + dx, y + dy) 
 
-      @events[:abyss_reached].call if region == :abyss
+      if r1 != r2
+        @events[[:leave_region, r1]].call
+        @events[[:enter_region, r2]].call
+      end
     end
 
-    def on_event(name, &block)
-      @events[name] = block
+    def on_event(*event, &block)
+      @events[event] = block
     end
 
     private

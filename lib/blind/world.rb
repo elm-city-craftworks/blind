@@ -14,8 +14,6 @@ module Blind
       current_region
     end
 
-    private
-
     def current_region
       case @current_position.distance(@center)
       when 0...20
