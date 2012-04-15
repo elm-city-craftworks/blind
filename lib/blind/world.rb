@@ -4,15 +4,20 @@ module Blind
   class World
     def initialize
       @center = Blind::Point.new(0,0) 
-      @player = Blind::Point.new(0,0)
+      @current_position = Blind::Point.new(0,0)
     end
+
+    attr_reader :current_position
 
     def move_to(x,y)
-      @player = Blind::Point.new(x,y)
+      @current_position = Blind::Point.new(x,y)
+      current_region
     end
 
+    private
+
     def current_region
-      case @player.distance(@center)
+      case @current_position.distance(@center)
       when 0...20
         :safe_zone
       when 20...100

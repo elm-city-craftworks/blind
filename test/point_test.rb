@@ -15,4 +15,18 @@ describe Blind::Point do
     point_a.distance(point_b).must_equal(5)
     point_b.distance(point_a).must_equal(5)
   end
+
+  it "must be considered equal to another point when distance=0" do
+    point_a = Blind::Point.new(2, 3)
+    point_b = Blind::Point.new(2, 3)
+    point_c = Blind::Point.new(4, 5)
+
+    point_a.must_equal(point_a)
+
+    point_a.must_equal(point_b)
+    point_b.must_equal(point_a)
+    
+    point_a.wont_equal(point_c)
+    point_b.wont_equal(point_c)
+  end
 end

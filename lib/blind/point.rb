@@ -18,6 +18,10 @@ module Blind
       (self.data - other.data).r
     end
 
+    def ==(other)
+      distance(other).zero?
+    end
+
     protected
     
     attr_reader :data

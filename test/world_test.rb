@@ -1,9 +1,17 @@
 require_relative "helper"
 require_relative "../lib/blind/world"
+require_relative "../lib/blind/point"
 
 describe Blind::World do
 
   let(:world) { Blind::World.new }
+
+  it "must be able to determine the current position" do
+    world.current_position.must_equal(Blind::Point.new(0,0))
+    
+    world.move_to(100,20)
+    world.current_position.must_equal(Blind::Point.new(100,20))
+  end
 
   it "must locate points in the safe zone" do
     [[0,0], [19,0], [0,19.999]].each do |point|
@@ -30,9 +38,7 @@ describe Blind::World do
   end
 
   def assert_region(region, location)
-    world.move_to(*location)
-   
-    region.must_equal world.current_region,
+    region.must_equal world.move_to(*location)
                       "expected #{location} to be in #{region}"
   end
 end
