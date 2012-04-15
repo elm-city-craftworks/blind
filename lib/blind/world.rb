@@ -3,7 +3,7 @@ require_relative "point"
 module Blind
   class World
     def initialize
-      @center = Blind::Point.new(0,0) 
+      @center           = Blind::Point.new(0,0) 
       @current_position = Blind::Point.new(0,0)
     end
 
@@ -11,6 +11,7 @@ module Blind
 
     def move_to(x,y)
       @current_position = Blind::Point.new(x,y)
+
       current_region
     end
 

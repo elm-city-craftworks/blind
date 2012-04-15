@@ -17,8 +17,16 @@ module Blind
       end
     end
 
+    def current_position
+      world.current_position
+    end
+
+    def current_region
+      world.current_region
+    end
+
     def on_event(*event, &block)
-      @events[event] = block
+      events[event] = block
     end
 
     private
