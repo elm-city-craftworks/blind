@@ -15,14 +15,16 @@ module Blind
         @events[[:leave_region, r1]].call
         @events[[:enter_region, r2]].call
       end
-    end
 
-    def current_position
-      world.current_position
-    end
+      mines = world.mine_positions
 
-    def current_region
-      world.current_region
+      if mines.find { |e| e.distance(world.current_position) < 5 }
+        @events[[:mine_detonated]].call
+      end
+
+      if world.exit_position.distance(world.current_position) < 2
+        @events[[:exit_located]].call
+      end
     end
 
     def on_event(*event, &block)

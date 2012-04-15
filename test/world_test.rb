@@ -4,7 +4,22 @@ require_relative "../lib/blind/point"
 
 describe Blind::World do
 
-  let(:world) { Blind::World.new }
+  let(:world) { Blind::World.new(5) }
+  let(:minefield_range) { Blind::World::MINE_FIELD_RANGE }
+
+  it "must have mine positions" do
+    world.mine_positions.count.must_equal(5)
+
+    world.mine_positions.each do |pos|
+      minefield_range.must_include(pos.x)
+      minefield_range.must_include(pos.y) 
+    end
+  end
+
+  it "must have an exit position in the minefield" do
+    minefield_range.must_include(world.exit_position.x)
+    minefield_range.must_include(world.exit_position.y)
+  end
 
   it "must be able to determine the current position" do
     world.current_position.must_equal(Blind::Point.new(0,0))

@@ -26,6 +26,10 @@ module Blind
       [x,y]
     end
 
+    def to_s
+      "(#{x}, #{y})"
+    end
+
     protected
     
     attr_reader :data

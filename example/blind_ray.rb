@@ -17,10 +17,12 @@ Ray.game "Blind" do
     horn.looping = true
     horn.volume = 0
 
-
     grenade = sound("#{File.dirname(__FILE__)}/data/grenade.wav")
 
-    game = Blind::Game.new(Blind::World.new)
+    win = sound("#{File.dirname(__FILE__)}/data/win.wav")
+    
+    world = Blind::World.new(5)
+    game  = Blind::Game.new(world)
 
     game.on_event(:enter_region, :danger_zone) { horn.volume = 100 }
     game.on_event(:leave_region, :danger_zone) { horn.volume = 0 }
@@ -31,19 +33,34 @@ Ray.game "Blind" do
       exit!
     end
 
+    game.on_event(:mine_detonated) do
+      grenade.pitch = 1.5
+      grenade.play
+      sleep grenade.duration
+      exit!
+    end
+
+    game.on_event(:exit_located) do
+      win.play
+      sleep win.duration
+      exit!
+    end
+
     always do
       game.move(0,-0.2)  if holding?(:w) 
       game.move(0 ,0.2)  if holding?(:s)
       game.move(-0.2, 0)  if holding?(:a)
       game.move(0.2,  0)  if holding?(:d)
 
-      Ray::Audio.pos = [game.current_position.x, game.current_position.y, 0]
+      Ray::Audio.pos = [world.current_position.x, world.current_position.y, 0]
     end
     
     render do |win|
       if $DEBUG
-        win.draw text("Player position #{game.current_position.x}, #{game.current_position.y}\n"+
-                      "Region #{game.current_region}")
+        win.draw text("Player position #{world.current_position}\n"+
+                      "Region #{world.current_region}\n"+
+                      "Mines\n #{world.mine_positions.join("\n")}\n"+
+                      "Exit\n #{world.exit_position}")
       end
     end
   end

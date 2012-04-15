@@ -4,7 +4,7 @@ require_relative "../lib/blind/world"
 
 describe Blind::Game do
   it "must be able to trigger an event when the outer rim is reached" do
-    game = Blind::Game.new(Blind::World.new)
+    game = Blind::Game.new(Blind::World.new(5))
 
     dead = false
     game.on_event(:enter_region, :outer_rim) { dead = true }
@@ -17,7 +17,7 @@ describe Blind::Game do
   end
 
   it "must be able to trigger an event when the danger zone is reached" do
-    game = Blind::Game.new(Blind::World.new)
+    game = Blind::Game.new(Blind::World.new(5))
 
     alert = false
     game.on_event(:enter_region, :danger_zone)  { alert = true }
