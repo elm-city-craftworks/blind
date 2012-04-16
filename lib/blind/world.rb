@@ -11,11 +11,10 @@ module Blind
       @current_position = Blind::Point.new(0,0)
 
       @mine_positions   = mine_count.times.map do
-        Blind::Point.new(rand(MINE_FIELD_RANGE), rand(MINE_FIELD_RANGE))
+        random_minefield_position
       end
 
-      @exit_position = 
-        Blind::Point.new(rand(MINE_FIELD_RANGE), rand(MINE_FIELD_RANGE))
+      @exit_position = random_minefield_position
     end
 
     attr_reader :current_position, :mine_positions, :exit_position
@@ -41,6 +40,16 @@ module Blind
       else
         :outer_rim
       end
+    end
+
+    private
+    
+    def random_minefield_position
+      begin 
+        point = Blind::Point.new(rand(MINE_FIELD_RANGE), rand(MINE_FIELD_RANGE))
+      end until MINE_FIELD_RANGE.include?(@center.distance(point))
+
+      point
     end
   end
 end

@@ -29,4 +29,10 @@ describe Blind::Point do
     point_a.wont_equal(point_c)
     point_b.wont_equal(point_c)
   end
+
+  it "must have a nice string representation" do
+    point_a = Blind::Point.new(3,7)
+
+    point_a.to_s.must_equal("(3, 7)")
+  end
 end

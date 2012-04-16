@@ -1,5 +1,8 @@
 module Blind
   class Game
+    MINE_DETONATION_RANGE = 5
+    EXIT_ACTIVATION_RANGE = 2
+
     def initialize(world)
       @world  = world 
       @events = Hash.new { |h,k| h[k] = ->() {} }
@@ -18,11 +21,11 @@ module Blind
 
       mines = world.mine_positions
 
-      if mines.find { |e| world.distance(e) < 5 }
+      if mines.find { |e| world.distance(e) < MINE_DETONATION_RANGE }
         broadcast_event(:mine_detonated)
       end
 
-      if world.distance(world.exit_position) < 2
+      if world.distance(world.exit_position) < EXIT_ACTIVATION_RANGE
         broadcast_event(:exit_located)
       end
     end
