@@ -12,28 +12,49 @@ Ray.game "Blind" do
   scene :main do
     self.frames_per_second = 20
 
+    world = Blind::World.new(20)
+    game  = Blind::Game.new(world)
+
+
     horn = sound("#{File.dirname(__FILE__)}/data/horn.wav")
     horn.play
     horn.looping = true
+
     horn.volume = 0
+
+
+    step = 0.04
+    
+    mines = world.mine_positions.map do |pos| 
+      s          = sound("#{File.dirname(__FILE__)}/data/beep.wav")
+      s.pos      = [pos.x, pos.y, 1]
+      s.looping  = true
+      s.pitch    = step + rand(0.05)
+      step += 0.05
+
+      s.play
+
+      s
+    end
 
     grenade = sound("#{File.dirname(__FILE__)}/data/grenade.wav")
 
     win = sound("#{File.dirname(__FILE__)}/data/win.wav")
     
-    world = Blind::World.new(5)
-    game  = Blind::Game.new(world)
-
     game.on_event(:enter_region, :danger_zone) { horn.volume = 100 }
     game.on_event(:leave_region, :danger_zone) { horn.volume = 0 }
 
     game.on_event(:enter_region, :outer_rim) do
+      mines.each { |e| e.stop }
+
       grenade.play
       sleep grenade.duration
       exit!
     end
 
     game.on_event(:mine_detonated) do
+      mines.each { |e| e.stop }
+
       grenade.pitch = 1.5
       grenade.play
       sleep grenade.duration
@@ -41,6 +62,8 @@ Ray.game "Blind" do
     end
 
     game.on_event(:exit_located) do
+      mines.each { |e| e.stop }
+
       win.play
       sleep win.duration
       exit!

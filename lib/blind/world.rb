@@ -20,6 +20,10 @@ module Blind
 
     attr_reader :current_position, :mine_positions, :exit_position
 
+    def distance(other)
+      @current_position.distance(other)
+    end
+
     def move_to(x,y)
       @current_position = Blind::Point.new(x,y)
 

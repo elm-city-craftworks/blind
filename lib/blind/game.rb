@@ -7,23 +7,22 @@ module Blind
 
     def move(dx, dy)
       x,y = world.current_position.to_a
-
-      r1 = world.current_region
-      r2 = world.move_to(x + dx, y + dy) 
+      r1  = world.current_region
+      r2  = world.move_to(x + dx, y + dy) 
 
       if r1 != r2
-        @events[[:leave_region, r1]].call
-        @events[[:enter_region, r2]].call
+        broadcast_event(:leave_region, r1)
+        broadcast_event(:enter_region, r2)
       end
 
       mines = world.mine_positions
 
-      if mines.find { |e| e.distance(world.current_position) < 5 }
-        @events[[:mine_detonated]].call
+      if mines.find { |e| world.distance(e) < 5 }
+        broadcast_event(:mine_detonated)
       end
 
-      if world.exit_position.distance(world.current_position) < 2
-        @events[[:exit_located]].call
+      if world.distance(world.exit_position) < 2
+        broadcast_event(:exit_located)
       end
     end
 
@@ -32,6 +31,10 @@ module Blind
     end
 
     private
+
+    def broadcast_event(*args)
+      @events[args].call
+    end
 
     attr_reader :world, :events
   end
