@@ -5,7 +5,10 @@ require_relative "../lib/blind/point"
 describe Blind::World do
 
   let(:world) { Blind::World.new(5) }
-  let(:minefield_range) { Blind::World::MINE_FIELD_RANGE }
+
+  let(:minefield_range) do
+    -Blind::World::MINE_FIELD_RANGE.max .. Blind::World::MINE_FIELD_RANGE.max
+  end
 
   it "must have mine positions" do
     world.mine_positions.count.must_equal(5)
