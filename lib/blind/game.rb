@@ -1,12 +1,14 @@
 module Blind
   class Game
-    MINE_DETONATION_RANGE = 5
+    MINE_DETONATION_RANGE = 12
     EXIT_ACTIVATION_RANGE = 2
 
     def initialize(world)
       @world  = world 
       @events = Hash.new { |h,k| h[k] = ->() {} }
     end
+
+    attr_reader :world
 
     def move(dx, dy)
       x,y = world.current_position.to_a
@@ -37,9 +39,9 @@ module Blind
     private
 
     def broadcast_event(*args)
-      @events[args].call
+      events[args].call
     end
 
-    attr_reader :world, :events
+    attr_reader :events
   end
 end
