@@ -7,6 +7,7 @@ module Blind
 
     def move(dx, dy)
       x,y = world.current_position.to_a
+
       r1  = world.current_region
       r2  = world.move_to(x + dx, y + dy) 
 
