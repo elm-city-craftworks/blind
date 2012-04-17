@@ -1,6 +1,6 @@
 module Blind
   class Game
-    MINE_DETONATION_RANGE = 12
+    MINE_DETONATION_RANGE = 8
     EXIT_ACTIVATION_RANGE = 2
 
     def initialize(world)

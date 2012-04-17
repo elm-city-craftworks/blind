@@ -51,7 +51,7 @@ describe Blind::World do
 
   it "must locate points in the outer rim" do
     [[0,120], [120,0], [75, 150]].each do |point|
-      assert_region :outer_rim, point
+      assert_region :deep_space, point
     end
   end
 

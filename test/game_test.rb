@@ -8,10 +8,10 @@ describe Blind::Game do
 
   let(:game)  { Blind::Game.new(world) }
 
-  it "must trigger an event when the outer rim is reached" do
+  it "must trigger an event when deep space is reached" do
     dead = false
 
-    game.on_event(:enter_region, :outer_rim) { dead = true }
+    game.on_event(:enter_region, :deep_space) { dead = true }
 
     refute dead, "should not be dead before the outer rim is reached"
 

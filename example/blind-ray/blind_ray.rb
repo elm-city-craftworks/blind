@@ -9,6 +9,9 @@ require_relative "lib/blind/ui/game_decorator"
 
 if ARGV[0]
   num_mines = ARGV[0].to_i
+
+  # NOTE: This is a workaround for problem I spotted with having more
+  # than 64 sounds in the game playing simultaneously!
   abort("Too many mines! Try 60 or fewer.") if num_mines > 60
 else
   num_mines = 30

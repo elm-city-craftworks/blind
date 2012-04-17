@@ -39,7 +39,7 @@ module Blind
       when DANGER_ZONE_RANGE
         :danger_zone
       else
-        :outer_rim
+        :deep_space
       end
     end
 
