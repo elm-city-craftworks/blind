@@ -17,7 +17,8 @@ end
 # Take care of some initial boilerplate for the game
 
 game    = Blind::UI::GameDecorator.new(num_mines)
-message = "Find the phone, avoid the beeping mines and the sirens"
+message = "Find the phone, avoid the beeping mines and the sirens\n"+
+          "(Use WASD keys to move)"
 
 Ray::Audio.pos = [0,0,0]
 

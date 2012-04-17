@@ -46,13 +46,13 @@ module Blind
     private
     
     def random_minefield_position
-      begin 
-        limit = MINE_FIELD_RANGE.max
+      angle  = rand(0..2*Math::PI)
+      length = rand(MINE_FIELD_RANGE)
 
-        point = Blind::Point.new(rand(-limit..limit),rand(-limit..limit))
-      end until MINE_FIELD_RANGE.include?(center_position.distance(point))
+      x = length*Math.cos(angle)
+      y = length*Math.sin(angle)
 
-      point
+      Blind::Point.new(x.to_i,y.to_i)
     end
   end
 end
