@@ -21,6 +21,36 @@ module Blind
         game.move(x,y)
       end
 
+      def detect_danger_zone
+        if in_danger_zone
+          min = Blind::World::DANGER_ZONE_RANGE.min
+          max = Blind::World::DANGER_ZONE_RANGE.max
+
+          sounds[:siren].volume = 
+            ((world.distance(world.center_position) - min) / max.to_f) * 100
+        else
+          sounds[:siren].volume = 0
+        end
+      end
+
+      def to_s
+        "Player position #{world.current_position}\n"+
+        "Region #{world.current_region}\n"+
+        "Mines\n #{world.mine_positions.each_slice(5)
+                         .map { |e| e.join(", ") }.join("\n")}\n"+
+        "Exit\n #{world.exit_position}"
+      end
+
+      def player_position
+        world.current_position
+      end
+
+      def finished?
+        !!game_over_message
+      end
+
+      private
+
       def setup_sounds
         sounds[:phone]       = JukeBox.phone(@game.world.exit_position)
         sounds[:siren]       = JukeBox.siren
@@ -51,31 +81,7 @@ module Blind
         end
       end
 
-      def detect_danger_zone
-        if in_danger_zone
-          min = Blind::World::DANGER_ZONE_RANGE.min
-          max = Blind::World::DANGER_ZONE_RANGE.max
-
-          sounds[:siren].volume = 
-            ((world.distance(world.center_position) - min) / max.to_f) * 100
-        else
-          sounds[:siren].volume = 0
-        end
-      end
-
-      def to_s
-        "Player position #{world.current_position}\n"+
-        "Region #{world.current_region}\n"+
-        "Mines\n #{world.mine_positions.each_slice(5)
-                         .map { |e| e.join(", ") }.join("\n")}\n"+
-        "Exit\n #{world.exit_position}"
-      end
-
-      def player_position
-        world.current_position
-      end
-
-       def lose_game(message)
+      def lose_game(message)
         silence_sounds
 
         sound = sounds[:explosion]
@@ -87,14 +93,10 @@ module Blind
       def win_game(message)
         silence_sounds
 
-        sound = @sounds[:celebration]
+        sound = sounds[:celebration]
         sound.play
 
         self.game_over_message = message
-      end
-
-      def finished?
-        !!game_over_message
       end
 
       def silence_sounds

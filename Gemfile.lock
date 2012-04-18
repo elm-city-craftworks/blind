@@ -1,9 +1,0 @@
-GEM
-  specs:
-    ray (0.2.0)
-
-PLATFORMS
-  ruby
-
-DEPENDENCIES
-  ray
