@@ -37,7 +37,7 @@ module Blind
 
         positions.map do |pos|
           new_sound("beep") do |s|
-            s.pos     = [pos.x, pos.y, 2]
+            s.pos     = [pos.x, pos.y, 1]
             s.looping = true
             s.pitch   = step + rand(step_size)
 

@@ -1,4 +1,5 @@
-require "blind"
+require_relative "../world"
+require_relative "../game"
 
 require_relative "juke_box"
 

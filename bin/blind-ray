@@ -2,7 +2,7 @@
 
 require 'ray'
 
-require_relative "lib/blind/ui/game_presenter"
+require_relative "../lib/blind"
 
 # Optionally set the number of mines in the game.
 # If an argument is not provided, the game will create 30 mines by default
