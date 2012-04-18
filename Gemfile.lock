@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ray (0.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ray
