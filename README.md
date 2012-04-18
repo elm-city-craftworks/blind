@@ -21,6 +21,8 @@ WHICH CERTAIN DOOM IS INEVITABLE.
 
 > PLEASE HELP THE RUBYISTS ESCAPE FROM THEIR PENDING DOOM!
 
+**NOTE: This game depends on Ruby 1.9.3 features and will not work without modification on other Ruby version**
+
 # OS X instructions
 
 0. Install glew and libsndfile. Using homebrew, this is `brew install glew libsndfile`
