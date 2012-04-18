@@ -21,17 +21,17 @@ module Blind
                 :mine_positions,  :exit_position
 
     def distance(other)
-      @current_position.distance(other)
+      current_position.distance(other)
     end
 
     def move_to(x,y)
-      @current_position = Blind::Point.new(x,y)
+      self.current_position = Blind::Point.new(x,y)
 
       current_region
     end
 
     def current_region
-      case @current_position.distance(center_position)
+      case current_position.distance(center_position)
       when SAFE_ZONE_RANGE
         :safe_zone
       when MINE_FIELD_RANGE
@@ -44,6 +44,8 @@ module Blind
     end
 
     private
+
+    attr_writer :current_position
     
     def random_minefield_position
       angle  = rand(0..2*Math::PI)

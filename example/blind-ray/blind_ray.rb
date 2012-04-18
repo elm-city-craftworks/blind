@@ -2,7 +2,7 @@
 
 require 'ray'
 
-require_relative "lib/blind/ui/game_decorator"
+require_relative "lib/blind/ui/game_presenter"
 
 # Optionally set the number of mines in the game.
 # If an argument is not provided, the game will create 30 mines by default
@@ -19,7 +19,7 @@ end
 
 # Take care of some initial boilerplate for the game
 
-game    = Blind::UI::GameDecorator.new(num_mines)
+game    = Blind::UI::GamePresenter.new(num_mines)
 message = "Find the phone, avoid the beeping mines and the sirens\n"+
           "(Use WASD keys to move)"
 
