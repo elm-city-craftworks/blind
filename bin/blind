@@ -1,21 +1,39 @@
-#!/usr/bin/env ruby 
+#!/usr/bin/env ruby
 
 require 'ray'
+require 'optparse'
 
 require_relative "../lib/blind"
 
-# Optionally set the number of mines in the game.
-# If an argument is not provided, the game will create 30 mines by default
+options = {}
+option_parser = OptionParser.new do |opts|
 
-if ARGV[0]
-  num_mines = ARGV[0].to_i
+  options[:num_mines] = 30
+  opts.on("-n MINES",
+          ('1'..'60').to_a,
+          "Number of mines, between 1 and 60. Default: #{options[:num_mines]}") do |num_mines|
 
-  # NOTE: This is a workaround for problem I spotted with having more
-  # than 64 sounds in the game playing simultaneously!
-  abort("Too many mines! Try 60 or fewer.") if num_mines > 60
-else
-  num_mines = 30
+    # NOTE: This is a workaround for problem I spotted with having more
+    # than 64 sounds in the game playing simultaneously!
+    options[:num_mines] = num_mines.to_i
+  end
+
+  opts.on("-d", "--debug",
+         "Enable debug output") do
+    $DEBUG = true
+  end
+
 end
+
+# Handle invalid arguments gracefully
+begin
+  option_parser.parse!
+rescue OptionParser::InvalidOption => e
+  puts e
+  puts option_parser
+  exit 1
+end
+num_mines = options[:num_mines]
 
 # Take care of some initial boilerplate for the game
 
@@ -41,8 +59,8 @@ Ray.game "Blind" do
         message = game.game_over_message
       else
         game.detect_danger_zone
-        
-        game.move( 0.0, -0.2)  if holding?(:w) 
+
+        game.move( 0.0, -0.2)  if holding?(:w)
         game.move( 0.0,  0.2)  if holding?(:s)
         game.move(-0.2,  0.0)  if holding?(:a)
         game.move( 0.2,  0.0)  if holding?(:d)
@@ -52,7 +70,7 @@ Ray.game "Blind" do
         Ray::Audio.pos = [position.x, position.y, 0]
       end
     end
-    
+
     render do |win|
       win.draw(text(message, :size => 20, :at => [30,30]))
       win.draw(text(game.to_s, :at => [30, 200])) if $DEBUG
