@@ -18,6 +18,11 @@ option_parser = OptionParser.new do |opts|
     options[:num_mines] = num_mines.to_i
   end
 
+  opts.on("-d", "--debug",
+         "Enable debug output") do
+    $DEBUG = true
+  end
+
 end
 
 # Handle invalid arguments gracefully
