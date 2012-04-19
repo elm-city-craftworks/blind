@@ -8,10 +8,10 @@ require_relative "../lib/blind"
 options = {}
 option_parser = OptionParser.new do |opts|
 
-  options[:mines] = 30
+  options[:num_mines] = 30
   opts.on("-n MINES",
           ('1'..'60').to_a,
-          "Number of mines, between 1 and 60") do |num_mines|
+          "Number of mines, between 1 and 60. Default: #{options[:num_mines]}") do |num_mines|
 
     # NOTE: This is a workaround for problem I spotted with having more
     # than 64 sounds in the game playing simultaneously!
