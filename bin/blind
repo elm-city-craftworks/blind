@@ -20,7 +20,14 @@ option_parser = OptionParser.new do |opts|
 
 end
 
-option_parser.parse!
+# Handle invalid arguments gravefully
+begin
+  option_parser.parse!
+rescue OptionParser::InvalidOption => e
+  puts e
+  puts option_parser
+  exit 1
+end
 num_mines = options[:num_mines]
 
 # Take care of some initial boilerplate for the game
