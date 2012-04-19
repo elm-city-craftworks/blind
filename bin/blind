@@ -20,7 +20,7 @@ option_parser = OptionParser.new do |opts|
 
 end
 
-# Handle invalid arguments gravefully
+# Handle invalid arguments gracefully
 begin
   option_parser.parse!
 rescue OptionParser::InvalidOption => e
