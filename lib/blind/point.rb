@@ -16,6 +16,8 @@ module Blind
       @data = Vector[x,y]
     end
 
+    attr_accessor :label
+
     def x
       data[0]
     end

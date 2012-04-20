@@ -32,23 +32,24 @@ module Blind
     attr_reader :reference_point
 
     def center_position
-      @positions.find { |pos| pos[:label] == :center }[:location]
+      @positions.find { |pos| pos.label == :center }
     end
 
     def exit_position
-      @positions.find { |pos| pos[:label] == :exit }[:location]
+      @positions.find { |pos| pos.label == :exit }
     end
 
     def mine_positions
-      @positions.select { |pos| pos[:label] == :mine }.map { |e| e[:location] }
+      @positions.select { |pos| pos.label == :mine }
     end
 
     def add_region(label, minimum_distance)
       @regions << { :label => label, :minimum_distance => minimum_distance }
     end
 
-    def add_position(label, location)
-      @positions << { :label => label, :location => location }
+    def add_position(label, position)
+      position.label = label
+      @positions << position
     end
 
     def region_at(point)
