@@ -7,7 +7,7 @@ module Blind
   module UI
     class GamePresenter
       def initialize(mine_count=40)
-        @world  = Blind::World.new(mine_count)
+        @world  = Blind::World.standard(mine_count)
         @game   = Blind::Game.new(@world)
         @sounds = {}
    

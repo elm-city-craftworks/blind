@@ -2,23 +2,46 @@ require_relative "point"
 
 module Blind
   class World
-    SAFE_ZONE_RANGE   = 0...20
-    MINE_FIELD_RANGE  = 20...100
-    DANGER_ZONE_RANGE = 100...120
+    # TODO: FIX THIS STOPGAP MEASURE 
+    MINEFIELD_RANGE = 20...100
+
+    def self.standard(mine_count)
+      Blind::World.new(5).tap do |w|
+        w.add_region(:safe_zone,     0)
+        w.add_region(:mine_field,   20)
+        w.add_region(:danger_zone, 100)
+        w.add_region(:deep_space,  120)
+      end
+    end
 
     def initialize(mine_count)
       @center_position  = Blind::Point.new(0,0) 
       @current_position = Blind::Point.new(0,0)
 
       @mine_positions   = mine_count.times.map do
-        random_minefield_position
+        random_position(MINEFIELD_RANGE)
       end
 
-      @exit_position = random_minefield_position
+      @exit_position = random_position(MINEFIELD_RANGE)
+
+      @regions = []
     end
 
     attr_reader :center_position, :current_position, 
                 :mine_positions,  :exit_position
+
+
+    def add_region(name, minimum_distance)
+      @regions << { :name => name, :minimum_distance => minimum_distance }
+    end
+
+    def region_at(point)
+      distance = point.distance(center_position)
+
+      @regions.select { |r| distance >= r[:minimum_distance] }
+              .max_by { |r| r[:minimum_distance] }
+              .fetch(:name)
+    end
 
     def distance(other)
       current_position.distance(other)
@@ -31,25 +54,16 @@ module Blind
     end
 
     def current_region
-      case current_position.distance(center_position)
-      when SAFE_ZONE_RANGE
-        :safe_zone
-      when MINE_FIELD_RANGE
-        :mine_field
-      when DANGER_ZONE_RANGE
-        :danger_zone
-      else
-        :deep_space
-      end
+      region_at(current_position)
     end
 
     private
 
     attr_writer :current_position
     
-    def random_minefield_position
+    def random_position(distance_range)
       angle  = rand(0..2*Math::PI)
-      length = rand(MINE_FIELD_RANGE)
+      length = rand(distance_range)
 
       x = length*Math.cos(angle)
       y = length*Math.sin(angle)

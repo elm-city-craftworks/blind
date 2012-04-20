@@ -4,7 +4,7 @@ require_relative "../lib/blind/world"
 
 describe Blind::Game do
   # NOTE: use just one mine to make testing easier
-  let(:world) { Blind::World.new(1) }
+  let(:world) { Blind::World.standard(1) }
 
   let(:game)  { Blind::Game.new(world) }
 
