@@ -11,7 +11,7 @@ module Blind
     attr_reader :world
 
     def move(dx, dy)
-      x,y = world.current_position.to_a
+      x,y = world.reference_point.to_a
 
       r1  = world.current_region
       r2  = world.move_to(x + dx, y + dy) 

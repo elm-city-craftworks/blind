@@ -6,33 +6,49 @@ module Blind
     MINEFIELD_RANGE = 20...100
 
     def self.standard(mine_count)
-      Blind::World.new(5).tap do |w|
+      Blind::World.new.tap do |w|
         w.add_region(:safe_zone,     0)
         w.add_region(:mine_field,   20)
         w.add_region(:danger_zone, 100)
         w.add_region(:deep_space,  120)
+
+        w.add_position(:center, Blind::Point.new(0,0))
+
+        mine_count.times do 
+          w.add_position(:mine, Blind::Point.random(MINEFIELD_RANGE))
+        end
+
+        w.add_position(:exit, Blind::Point.random(MINEFIELD_RANGE))
       end
     end
 
-    def initialize(mine_count)
-      @center_position  = Blind::Point.new(0,0) 
-      @current_position = Blind::Point.new(0,0)
+    def initialize
+      @positions       = []
+      @regions         = []
 
-      @mine_positions   = mine_count.times.map do
-        random_position(MINEFIELD_RANGE)
-      end
-
-      @exit_position = random_position(MINEFIELD_RANGE)
-
-      @regions = []
+      @reference_point = Blind::Point.new(0,0)
     end
 
-    attr_reader :center_position, :current_position, 
-                :mine_positions,  :exit_position
+    attr_reader :reference_point
 
+    def center_position
+      @positions.find { |pos| pos[:label] == :center }[:location]
+    end
 
-    def add_region(name, minimum_distance)
-      @regions << { :name => name, :minimum_distance => minimum_distance }
+    def exit_position
+      @positions.find { |pos| pos[:label] == :exit }[:location]
+    end
+
+    def mine_positions
+      @positions.select { |pos| pos[:label] == :mine }.map { |e| e[:location] }
+    end
+
+    def add_region(label, minimum_distance)
+      @regions << { :label => label, :minimum_distance => minimum_distance }
+    end
+
+    def add_position(label, location)
+      @positions << { :label => label, :location => location }
     end
 
     def region_at(point)
@@ -40,35 +56,25 @@ module Blind
 
       @regions.select { |r| distance >= r[:minimum_distance] }
               .max_by { |r| r[:minimum_distance] }
-              .fetch(:name)
+              .fetch(:label)
     end
 
     def distance(other)
-      current_position.distance(other)
+      reference_point.distance(other)
     end
 
     def move_to(x,y)
-      self.current_position = Blind::Point.new(x,y)
+      self.reference_point = Blind::Point.new(x,y)
 
       current_region
     end
 
     def current_region
-      region_at(current_position)
+      region_at(reference_point)
     end
 
     private
 
-    attr_writer :current_position
-    
-    def random_position(distance_range)
-      angle  = rand(0..2*Math::PI)
-      length = rand(distance_range)
-
-      x = length*Math.cos(angle)
-      y = length*Math.sin(angle)
-
-      Blind::Point.new(x.to_i,y.to_i)
-    end
+    attr_writer :reference_point
   end
 end

@@ -33,10 +33,10 @@ describe Blind::World do
   end
 
   it "must be able to determine the current position" do
-    world.current_position.must_equal(Blind::Point.new(0,0))
+    world.reference_point.must_equal(Blind::Point.new(0,0))
     
     world.move_to(100,20)
-    world.current_position.must_equal(Blind::Point.new(100,20))
+    world.reference_point.must_equal(Blind::Point.new(100,20))
   end
 
   it "must locate points in the safe zone" do

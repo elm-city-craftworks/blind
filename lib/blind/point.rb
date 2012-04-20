@@ -2,6 +2,16 @@ require "matrix"
 
 module Blind
   class Point
+    def self.random(distance_range)
+      angle  = rand(0..2*Math::PI)
+      length = rand(distance_range)
+
+      x = length*Math.cos(angle)
+      y = length*Math.sin(angle)
+
+      Blind::Point.new(x.to_i,y.to_i)
+    end
+
     def initialize(x,y)
       @data = Vector[x,y]
     end
