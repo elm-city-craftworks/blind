@@ -34,7 +34,7 @@ module Blind
       end
 
       def to_s
-        "Player position #{world.current_position}\n"+
+        "Player position #{world.reference_point}\n"+
         "Region #{world.current_region}\n"+
         "Mines\n #{world.mine_positions.each_slice(5)
                          .map { |e| e.join(", ") }.join("\n")}\n"+
@@ -42,7 +42,7 @@ module Blind
       end
 
       def player_position
-        world.current_position
+        world.reference_point
       end
 
       def finished?
