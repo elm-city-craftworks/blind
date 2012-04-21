@@ -56,7 +56,7 @@ describe Blind::Game do
     
     game.on_event(:exit_located) { exit_located = true }
 
-    exit_pos = world.exit_position
+    exit_pos = world.positions.first(:exit)
 
     game.move(exit_pos.x, exit_pos.y + Blind::Game::EXIT_ACTIVATION_RANGE)
 

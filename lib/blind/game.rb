@@ -27,7 +27,7 @@ module Blind
         broadcast_event(:mine_detonated)
       end
 
-      if world.distance(world.exit_position) < EXIT_ACTIVATION_RANGE
+      if world.distance(world.positions.first(:exit)) < EXIT_ACTIVATION_RANGE
         broadcast_event(:exit_located)
       end
     end

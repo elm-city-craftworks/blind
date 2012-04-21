@@ -12,10 +12,12 @@ describe Blind::World do
   end
 
   it "must have mine positions" do
-    world.mine_positions.count.must_equal(5)
+    mine_positions = world.positions.all(:mine)
+    
+    mine_positions.count.must_equal(5)
 
-    world.mine_positions.each do |pos|
-      distance = world.center_position.distance(pos)
+    mine_positions.each do |pos|
+      distance = world.center_point.distance(pos)
       minefield_range.must_include(distance) 
     end
   end
@@ -28,7 +30,9 @@ describe Blind::World do
   end
 
   it "must have an exit position in the minefield" do
-    distance = world.center_position.distance(world.exit_position)
+    exit_position = world.positions.first(:exit)
+
+    distance = world.center_point.distance(exit_position)
     minefield_range.must_include(distance)
   end
 

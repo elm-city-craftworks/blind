@@ -38,7 +38,7 @@ module Blind
         "Region #{world.current_region}\n"+
         "Mines\n #{world.mine_positions.each_slice(5)
                          .map { |e| e.join(", ") }.join("\n")}\n"+
-        "Exit\n #{world.exit_position}"
+        "Exit\n #{world.positions.first(:exit)}"
       end
 
       def player_position
@@ -52,7 +52,7 @@ module Blind
       private
 
       def setup_sounds
-        sounds[:phone]       = JukeBox.phone(@game.world.exit_position)
+        sounds[:phone]       = JukeBox.phone(@game.world.positions.first(:exit))
         sounds[:siren]       = JukeBox.siren
         sounds[:explosion]   = JukeBox.explosion
         sounds[:celebration] = JukeBox.celebration

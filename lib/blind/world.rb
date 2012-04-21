@@ -2,45 +2,54 @@ require_relative "point"
 
 module Blind
   class World
-    # TODO: FIX THIS STOPGAP MEASURE 
-    MINEFIELD_RANGE = 20...100
+    class PointSet
+      def initialize
+        @points = []
+      end
 
+      def <<(point)
+        @points << point
+      end
+    
+      def first(label)
+        @points.find { |point| point.label == label }
+      end
+  
+      def all(label)
+        @points.select { |point| point.label == label }
+      end
+    end
+
+    # TODO: FIX THIS STOPGAP MEASURE 
     def self.standard(mine_count)
+      minefield_range = 20..100
+
       Blind::World.new.tap do |w|
         w.add_region(:safe_zone,     0)
         w.add_region(:mine_field,   20)
         w.add_region(:danger_zone, 100)
         w.add_region(:deep_space,  120)
 
-        w.add_position(:center, Blind::Point.new(0,0))
-
         mine_count.times do 
-          w.add_position(:mine, Blind::Point.random(MINEFIELD_RANGE))
+          w.add_position(:mine, Blind::Point.random(minefield_range))
         end
 
-        w.add_position(:exit, Blind::Point.random(MINEFIELD_RANGE))
+        w.add_position(:exit, Blind::Point.random(minefield_range))
       end
     end
 
     def initialize
-      @positions       = []
+      @positions       = PointSet.new
       @regions         = []
 
-      @reference_point = Blind::Point.new(0,0)
+      @reference_point = Point.new(0,0)
+      @center_point    = Point.new(0,0)
     end
 
-    attr_reader :reference_point
-
-    def center_position
-      @positions.find { |pos| pos.label == :center }
-    end
-
-    def exit_position
-      @positions.find { |pos| pos.label == :exit }
-    end
+    attr_reader :reference_point, :center_point, :positions
 
     def mine_positions
-      @positions.select { |pos| pos.label == :mine }
+      @positions.all(:mine)
     end
 
     def add_region(label, minimum_distance)
@@ -53,7 +62,7 @@ module Blind
     end
 
     def region_at(point)
-      distance = point.distance(center_position)
+      distance = point.distance(center_point)
 
       @regions.select { |r| distance >= r[:minimum_distance] }
               .max_by { |r| r[:minimum_distance] }
