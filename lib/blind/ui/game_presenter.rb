@@ -23,11 +23,12 @@ module Blind
 
       def detect_danger_zone
         if in_danger_zone
-          min = Blind::World::DANGER_ZONE_RANGE.min
-          max = Blind::World::DANGER_ZONE_RANGE.max
+          # FIXME: Remove these hard-coded values
+          min = 100
+          max = 120
 
           sounds[:siren].volume = 
-            ((world.distance(world.center_position) - min) / max.to_f) * 100
+            ((world.distance(world.center_point) - min) / max.to_f) * 100
         else
           sounds[:siren].volume = 0
         end
