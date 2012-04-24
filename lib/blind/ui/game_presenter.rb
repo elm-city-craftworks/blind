@@ -6,8 +6,8 @@ require_relative "juke_box"
 module Blind
   module UI
     class GamePresenter
-      def initialize(mine_count=40)
-        @world  = Blind::World.standard(mine_count)
+      def initialize(world)
+        @world  = world
         @game   = Blind::Game.new(@world)
         @sounds = {}
    
@@ -37,7 +37,7 @@ module Blind
       def to_s
         "Player position #{world.reference_point}\n"+
         "Region #{world.current_region}\n"+
-        "Mines\n #{world.mine_positions.each_slice(5)
+        "Mines\n #{world.positions.all(:mine).each_slice(5)
                          .map { |e| e.join(", ") }.join("\n")}\n"+
         "Exit\n #{world.positions.first(:exit)}"
       end
@@ -57,7 +57,7 @@ module Blind
         sounds[:siren]       = JukeBox.siren
         sounds[:explosion]   = JukeBox.explosion
         sounds[:celebration] = JukeBox.celebration
-        sounds[:mines]       = JukeBox.mines(@game.world.mine_positions)
+        sounds[:mines]       = JukeBox.mines(@game.world.positions.all(:mine))
       end
 
       def setup_events

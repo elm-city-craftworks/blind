@@ -21,7 +21,7 @@ module Blind
         broadcast_event(:enter_region, r2)
       end
 
-      mines = world.mine_positions
+      mines = world.positions.all(:mine)
 
       if mines.find { |e| world.distance(e) < MINE_DETONATION_RANGE }
         broadcast_event(:mine_detonated)

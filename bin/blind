@@ -3,6 +3,8 @@
 require 'ray'
 
 require_relative "../lib/blind"
+require_relative "../lib/blind/ui/game_runner"
+require_relative "../config/worlds"
 
 # Optionally set the number of mines in the game.
 # If an argument is not provided, the game will create 30 mines by default
@@ -19,45 +21,17 @@ end
 
 # Take care of some initial boilerplate for the game
 
-game    = Blind::UI::GamePresenter.new(num_mines)
+world   = Blind::Worlds.original(num_mines)
+game    = Blind::UI::GamePresenter.new(world)
 message = "Find the phone, avoid the beeping mines and the sirens\n"+
           "(Use WASD keys to move)"
 
 Ray::Audio.pos = [0,0,0]
 
-# Begin the actual Ray program. Most interesting work
-# gets delegated to the Blind::UI::GameDecorator object
+game_runner = Blind::UI::GameRunner.new
 
-Ray.game "Blind" do
-  register { add_hook :quit, method(:exit!) }
+scene         = game_runner.registered_scene(:main)
+scene.game    = game
+scene.message = message
 
-  scene :main do
-    self.frames_per_second = 10
-
-    add_hook :quit, method(:exit!)
-
-    always do
-      if game.finished?
-        message = game.game_over_message
-      else
-        game.detect_danger_zone
-        
-        game.move( 0.0, -0.2)  if holding?(:w) 
-        game.move( 0.0,  0.2)  if holding?(:s)
-        game.move(-0.2,  0.0)  if holding?(:a)
-        game.move( 0.2,  0.0)  if holding?(:d)
-
-        position = game.player_position
-
-        Ray::Audio.pos = [position.x, position.y, 0]
-      end
-    end
-    
-    render do |win|
-      win.draw(text(message, :size => 20, :at => [30,30]))
-      win.draw(text(game.to_s, :at => [30, 200])) if $DEBUG
-     end
-  end
-
-  scenes << :main
-end
+game_runner.run

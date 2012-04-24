@@ -20,24 +20,6 @@ module Blind
       end
     end
 
-    # TODO: FIX THIS STOPGAP MEASURE 
-    def self.standard(mine_count)
-      minefield_range = 20..100
-
-      Blind::World.new.tap do |w|
-        w.add_region(:safe_zone,     0)
-        w.add_region(:mine_field,   20)
-        w.add_region(:danger_zone, 100)
-        w.add_region(:deep_space,  120)
-
-        mine_count.times do 
-          w.add_position(:mine, Blind::Point.random(minefield_range))
-        end
-
-        w.add_position(:exit, Blind::Point.random(minefield_range))
-      end
-    end
-
     def initialize
       @positions       = PointSet.new
       @regions         = []
@@ -47,10 +29,6 @@ module Blind
     end
 
     attr_reader :reference_point, :center_point, :positions
-
-    def mine_positions
-      @positions.all(:mine)
-    end
 
     def add_region(label, minimum_distance)
       @regions << { :label => label, :minimum_distance => minimum_distance }

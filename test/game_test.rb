@@ -1,10 +1,11 @@
 require_relative "helper"
 require_relative "../lib/blind/game"
 require_relative "../lib/blind/world"
+require_relative "../config/worlds"
 
 describe Blind::Game do
   # NOTE: use just one mine to make testing easier
-  let(:world) { Blind::World.standard(1) }
+  let(:world) { Blind::Worlds.original(5) }
 
   let(:game)  { Blind::Game.new(world) }
 
@@ -40,7 +41,7 @@ describe Blind::Game do
 
     game.on_event(:mine_detonated) { detonated = true }
 
-    mine = world.mine_positions.first
+    mine = world.positions.first(:mine)
 
     game.move(mine.x - Blind::Game::MINE_DETONATION_RANGE, mine.y)
 

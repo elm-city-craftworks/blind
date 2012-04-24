@@ -1,0 +1,22 @@
+require_relative "../lib/blind/world"
+
+module Blind
+  module Worlds
+    def self.original(mine_count)
+      Blind::World.new.tap do |w|
+        minefield_range = 20..100
+
+        w.add_region(:safe_zone,     0)
+        w.add_region(:mine_field,   20)
+        w.add_region(:danger_zone, 100)
+        w.add_region(:deep_space,  120)
+
+        mine_count.times do 
+          w.add_position(:mine, Blind::Point.random(minefield_range))
+        end
+
+        w.add_position(:exit, Blind::Point.random(minefield_range))
+      end
+    end
+  end
+end

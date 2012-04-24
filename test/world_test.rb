@@ -1,10 +1,13 @@
 require_relative "helper"
 require_relative "../lib/blind/world"
 require_relative "../lib/blind/point"
+require_relative "../config/worlds"
+
+# FIXME: SPLIT OUT GENERAL TESTS FROM SCENARIO INDEPENDENT TESTS.
 
 describe Blind::World do
   let(:world) do
-    Blind::World.standard(5)
+    Blind::Worlds.original(5)
   end
 
   let(:minefield_range) do
