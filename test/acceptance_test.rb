@@ -1,9 +1,16 @@
+require "ray"
 require_relative "helper"
 
 require_relative "../lib/blind"
 require_relative "../config/worlds"
 
+
 describe "The full game" do
+  before do
+    Ray::Audio.volume = 0
+  end
+
+
   it "should result in a loss on mine collision" do
     world = Blind::Worlds.original(1)
     game  = Blind::UI::GamePresenter.new(world)
