@@ -7,6 +7,12 @@ module Blind
 
       attr_accessor :game, :message, :mine_count
 
+      def setup
+        self.message = 
+          "Find the phone, avoid the beeping mines and the sirens\n"+
+          "(Use WASD keys to move)"
+      end
+
       def register
         self.frames_per_second = 10
 
