@@ -1,6 +1,7 @@
-#!/usr/bin/env ruby 
+#!/usr/bin/env ruby
 
 require 'ray'
+require 'optparse'
 
 require_relative "../lib/blind"
 require_relative "../lib/blind/ui/game_runner"
@@ -8,16 +9,37 @@ require_relative "../config/worlds"
 
 # Optionally set the number of mines in the game.
 # If an argument is not provided, the game will create 30 mines by default
+options = {}
+option_parser = OptionParser.new do |opts|
 
-if ARGV[0]
-  num_mines = ARGV[0].to_i
+  options[:num_mines] = 30
+  opts.on("-n MINES",
+          ('1'..'60').to_a,
+          Integer,
+          "Number of mines, between 1 and 60. Default: #{options[:num_mines]}") do |num_mines|
 
-  # NOTE: This is a workaround for problem I spotted with having more
-  # than 64 sounds in the game playing simultaneously!
-  abort("Too many mines! Try 60 or fewer.") if num_mines > 60
-else
-  num_mines = 30
+    # NOTE: This is a workaround for problem I spotted with having more
+    # than 64 sounds in the game playing simultaneously!
+    options[:num_mines] = num_mines
+  end
+
+  opts.on("-d", "--debug",
+         "Enable debug output") do
+    $DEBUG = true
+  end
+
 end
+
+# Handle invalid arguments gracefully
+begin
+  option_parser.parse!
+rescue OptionParser::InvalidOption,
+       OptionParser::InvalidArgument => e
+  puts e
+  puts option_parser
+  exit 1
+end
+num_mines = options[:num_mines]
 
 # Take care of some initial boilerplate for the game
 
