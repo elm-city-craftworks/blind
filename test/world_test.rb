@@ -14,6 +14,15 @@ describe Blind::World do
     (20...100)
   end
 
+  it "must be able to measure how deep into a region a player has traveled" do
+    world.move_to(101,0)
+    world.regional_depth.must_equal(0.05)
+
+    world.move_to(0,110)
+    
+    world.regional_depth.must_equal(0.5)
+  end
+
   it "must have mine positions" do
     mine_positions = world.positions.all(:mine)
     

@@ -61,6 +61,20 @@ module Blind
       region_at(reference_point)
     end
 
+    def regional_depth
+      distance = reference_point.distance(center_point)
+
+      lower_bound =  @regions.select { |r| distance >= r[:minimum_distance] }
+                             .max_by { |r| r[:minimum_distance] }
+                             .fetch(:minimum_distance)
+
+
+      (distance.to_f - lower_bound) / 
+        (@regions.select { |r| distance < r[:minimum_distance] }
+                .min_by { |r| r[:minimum_distance] }
+                .fetch(:minimum_distance) - lower_bound)
+    end
+
     private
 
     attr_writer :reference_point

@@ -21,7 +21,7 @@ end
 
 # Take care of some initial boilerplate for the game
 
-world   = Blind::Worlds.original(num_mines)
+world   = Blind::Worlds.trivial#original(num_mines)
 game    = Blind::UI::GamePresenter.new(world)
 message = "Find the phone, avoid the beeping mines and the sirens\n"+
           "(Use WASD keys to move)"

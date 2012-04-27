@@ -18,5 +18,16 @@ module Blind
         w.add_position(:exit, Blind::Point.random(minefield_range))
       end
     end
+
+    def self.trivial
+      Blind::World.new.tap do |w|
+        w.add_region(:safe_zone,    0)
+        w.add_region(:mine_field,  10)
+        w.add_region(:danger_zone, 20)
+        w.add_region(:deep_space,  30)
+        
+        w.add_position(:exit, Blind::Point.random(10..20))
+      end
+    end
   end
 end
