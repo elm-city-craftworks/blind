@@ -9,10 +9,12 @@ require_relative "../config/worlds"
 
 # Optionally set the number of mines in the game.
 # If an argument is not provided, the game will create 30 mines by default
-options = {}
+
+options = { :num_mines => 30,
+            :map        => "original" }
+
 option_parser = OptionParser.new do |opts|
 
-  options[:num_mines] = 30
   opts.on("-n MINES",
           ('1'..'60').to_a,
           Integer,
@@ -21,6 +23,12 @@ option_parser = OptionParser.new do |opts|
     # NOTE: This is a workaround for problem I spotted with having more
     # than 64 sounds in the game playing simultaneously!
     options[:num_mines] = num_mines
+  end
+
+  opts.on("-m MAP",
+          String,
+          "Map name, Default: #{options[:map]}" ) do |map_name|
+    options[:map] = map_name
   end
 
   opts.on("-d", "--debug",
@@ -43,7 +51,7 @@ num_mines = options[:num_mines]
 
 # Take care of some initial boilerplate for the game
 
-world   = Blind::Worlds.original(num_mines)
+world   = Blind::Worlds.send(options[:map], num_mines)
 game    = Blind::UI::GamePresenter.new(world)
 message = "Find the phone, avoid the beeping mines and the sirens\n"+
           "(Use WASD keys to move)"

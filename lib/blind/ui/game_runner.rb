@@ -14,7 +14,7 @@ module Blind
       end
 
       def register
-        self.frames_per_second = 10
+        self.frames_per_second = 20
 
         always do
           if game.finished?
@@ -22,10 +22,10 @@ module Blind
           else
             game.detect_danger_zone
             
-            game.move( 0.0, -0.2)  if holding?(:w) 
-            game.move( 0.0,  0.2)  if holding?(:s)
-            game.move(-0.2,  0.0)  if holding?(:a)
-            game.move( 0.2,  0.0)  if holding?(:d)
+            game.move( 0.0, -0.1)  if holding?(:w) 
+            game.move( 0.0,  0.1)  if holding?(:s)
+            game.move(-0.1,  0.0)  if holding?(:a)
+            game.move( 0.1,  0.0)  if holding?(:d)
 
             position = game.player_position
 

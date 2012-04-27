@@ -32,8 +32,9 @@ module Blind
       def to_s
         "Player position #{world.reference_point}\n"+
         "Region #{world.current_region}\n"+
-        "Mines\n #{world.positions.all(:mine).each_slice(5)
-                         .map { |e| e.join(", ") }.join("\n")}\n"+
+        "Mines\n #{world.positions.all(:mine)
+                        .each_slice(5)
+                        .map { |e| e.join(", ") }.join("\n")}\n"+
         "Exit\n #{world.positions.first(:exit)}"
       end
 

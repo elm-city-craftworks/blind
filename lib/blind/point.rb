@@ -46,7 +46,7 @@ module Blind
     end
 
     def to_s
-      "(#{x}, #{y})"
+      "(#{'%.2f' % x}, #{'%.2f' % y})"
     end
 
     protected

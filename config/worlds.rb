@@ -19,7 +19,7 @@ module Blind
       end
     end
 
-    def self.trivial
+    def self.trivial(mine_count)
       Blind::World.new.tap do |w|
         w.add_region(:safe_zone,    0)
         w.add_region(:mine_field,  10)
