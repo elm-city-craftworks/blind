@@ -4,7 +4,7 @@ module Blind
   module Worlds
     def self.original(mine_count)
       Blind::World.new.tap do |w|
-        minefield_range = 20..100
+        minefield_range = 20...100
 
         w.add_region(:safe_zone,     0)
         w.add_region(:mine_field,   20)
@@ -26,7 +26,7 @@ module Blind
         w.add_region(:danger_zone, 20)
         w.add_region(:deep_space,  30)
         
-        w.add_position(:exit, Blind::Point.random(10..20))
+        w.add_position(:exit, Blind::Point.random(10...20))
       end
     end
   end

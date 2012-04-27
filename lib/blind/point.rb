@@ -9,7 +9,14 @@ module Blind
       x = length*Math.cos(angle)
       y = length*Math.sin(angle)
 
-      Blind::Point.new(x.to_i,y.to_i)
+      point  = new(x, y)
+      center = new(0, 0)
+
+      if distance_range.include?(point.distance(center))
+        point
+      else
+        random(distance_range)
+      end
     end
 
     def initialize(x,y)

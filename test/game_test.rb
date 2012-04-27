@@ -4,8 +4,10 @@ require_relative "../lib/blind/world"
 require_relative "../config/worlds"
 
 describe Blind::Game do
-  # NOTE: use just one mine to make testing easier
-  let(:world) { Blind::Worlds.original(5) }
+  let(:world) do
+    file = "#{File.dirname(__FILE__)}/fixtures/world.dump" 
+    Marshal.load(File.binread(file))
+  end
 
   let(:game)  { Blind::Game.new(world) }
 
