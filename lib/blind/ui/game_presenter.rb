@@ -15,7 +15,7 @@ module Blind
         setup_events
       end
 
-      attr_reader :game_over_message
+      attr_accessor :message
 
       def move(x,y)
         game.move(x,y)
@@ -43,7 +43,7 @@ module Blind
       end
 
       def finished?
-        !!game_over_message
+        !!message
       end
 
       private
@@ -84,7 +84,7 @@ module Blind
         sound = sounds[:explosion]
         sound.play
 
-        self.game_over_message = message
+        self.message = message
       end
 
       def win_game(message)
@@ -93,7 +93,7 @@ module Blind
         sound = sounds[:celebration]
         sound.play
 
-        self.game_over_message = message
+        self.message = message
       end
 
       def silence_sounds
@@ -112,7 +112,6 @@ module Blind
       attr_accessor :in_danger_zone
 
       attr_reader :sounds, :world, :game
-      attr_writer :game_over_message
     end
   end
 end

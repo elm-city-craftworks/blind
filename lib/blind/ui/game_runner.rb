@@ -18,7 +18,7 @@ module Blind
 
         always do
           if game.finished?
-            self.message = game.game_over_message
+            self.message = game.message
           else
             game.detect_danger_zone
             
