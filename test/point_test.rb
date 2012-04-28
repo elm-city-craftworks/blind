@@ -33,6 +33,6 @@ describe Blind::Point do
   it "must have a nice string representation" do
     point_a = Blind::Point.new(3,7)
 
-    point_a.to_s.must_equal("(3, 7)")
+    point_a.to_s.must_equal("(3.00, 7.00)")
   end
 end

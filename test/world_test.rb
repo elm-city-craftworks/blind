@@ -1,34 +1,58 @@
 require_relative "helper"
 require_relative "../lib/blind/world"
 require_relative "../lib/blind/point"
+require_relative "../config/worlds"
+
+# FIXME: SPLIT OUT GENERAL TESTS FROM SCENARIO INDEPENDENT TESTS.
 
 describe Blind::World do
-
-  let(:world) { Blind::World.new(5) }
+  let(:world) do
+    Blind::Worlds.original(5)
+  end
 
   let(:minefield_range) do
-    -Blind::World::MINE_FIELD_RANGE.max .. Blind::World::MINE_FIELD_RANGE.max
+    (20...100)
+  end
+
+  it "must be able to measure how deep into a region a player has traveled" do
+    world.move_to(101,0)
+    world.regional_depth.must_equal(0.05)
+
+    world.move_to(0,110)
+    
+    world.regional_depth.must_equal(0.5)
   end
 
   it "must have mine positions" do
-    world.mine_positions.count.must_equal(5)
+    mine_positions = world.positions.all(:mine)
+    
+    mine_positions.count.must_equal(5)
 
-    world.mine_positions.each do |pos|
-      minefield_range.must_include(pos.x)
-      minefield_range.must_include(pos.y) 
+    mine_positions.each do |pos|
+      distance = world.center_point.distance(pos)
+      minefield_range.must_include(distance) 
     end
   end
 
+  it "must be able to look up regions by position" do
+    world.region_at(Blind::Point.new(0,0)).must_equal(:safe_zone)
+    world.region_at(Blind::Point.new(20,0)).must_equal(:mine_field)
+    world.region_at(Blind::Point.new(100,0)).must_equal(:danger_zone)
+    world.region_at(Blind::Point.new(120,0)).must_equal(:deep_space)
+  end
+
   it "must have an exit position in the minefield" do
-    minefield_range.must_include(world.exit_position.x)
-    minefield_range.must_include(world.exit_position.y)
+    exit_position = world.positions.first(:exit)
+
+    distance = world.center_point.distance(exit_position)
+    minefield_range.must_include(distance)
   end
 
   it "must be able to determine the current position" do
-    world.current_position.must_equal(Blind::Point.new(0,0))
+    world.reference_point.must_equal(Blind::Point.new(0,0))
     
     world.move_to(100,20)
-    world.current_position.must_equal(Blind::Point.new(100,20))
+    world.reference_point.must_equal(Blind::Point.new(100,20))
   end
 
   it "must locate points in the safe zone" do

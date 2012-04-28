@@ -11,7 +11,7 @@ module Blind
     attr_reader :world
 
     def move(dx, dy)
-      x,y = world.current_position.to_a
+      x,y = world.reference_point.to_a
 
       r1  = world.current_region
       r2  = world.move_to(x + dx, y + dy) 
@@ -21,13 +21,13 @@ module Blind
         broadcast_event(:enter_region, r2)
       end
 
-      mines = world.mine_positions
+      mines = world.positions.all(:mine)
 
       if mines.find { |e| world.distance(e) < MINE_DETONATION_RANGE }
         broadcast_event(:mine_detonated)
       end
 
-      if world.distance(world.exit_position) < EXIT_ACTIVATION_RANGE
+      if world.distance(world.positions.first(:exit)) < EXIT_ACTIVATION_RANGE
         broadcast_event(:exit_located)
       end
     end

@@ -2,59 +2,81 @@ require_relative "point"
 
 module Blind
   class World
-    SAFE_ZONE_RANGE   = 0...20
-    MINE_FIELD_RANGE  = 20...100
-    DANGER_ZONE_RANGE = 100...120
-
-    def initialize(mine_count)
-      @center_position  = Blind::Point.new(0,0) 
-      @current_position = Blind::Point.new(0,0)
-
-      @mine_positions   = mine_count.times.map do
-        random_minefield_position
+    class PointSet
+      def initialize
+        @points = []
       end
 
-      @exit_position = random_minefield_position
+      def <<(point)
+        @points << point
+      end
+    
+      def first(label)
+        @points.find { |point| point.label == label }
+      end
+  
+      def all(label)
+        @points.select { |point| point.label == label }
+      end
     end
 
-    attr_reader :center_position, :current_position, 
-                :mine_positions,  :exit_position
+    def initialize
+      @positions       = PointSet.new
+      @regions         = []
+
+      @reference_point = Point.new(0,0)
+      @center_point    = Point.new(0,0)
+    end
+
+    attr_reader :reference_point, :center_point, :positions
+
+    def add_region(label, minimum_distance)
+      @regions << { :label => label, :minimum_distance => minimum_distance }
+    end
+
+    def add_position(label, position)
+      position.label = label
+      @positions << position
+    end
+
+    def region_at(point)
+      distance = point.distance(center_point)
+
+      @regions.select { |r| distance >= r[:minimum_distance] }
+              .max_by { |r| r[:minimum_distance] }
+              .fetch(:label)
+    end
 
     def distance(other)
-      current_position.distance(other)
+      reference_point.distance(other)
     end
 
     def move_to(x,y)
-      self.current_position = Blind::Point.new(x,y)
+      self.reference_point = Blind::Point.new(x,y)
 
       current_region
     end
 
     def current_region
-      case current_position.distance(center_position)
-      when SAFE_ZONE_RANGE
-        :safe_zone
-      when MINE_FIELD_RANGE
-        :mine_field
-      when DANGER_ZONE_RANGE
-        :danger_zone
-      else
-        :deep_space
-      end
+      region_at(reference_point)
+    end
+
+    def regional_depth
+      distance = reference_point.distance(center_point)
+
+      lower_bound =  @regions.select { |r| distance >= r[:minimum_distance] }
+                             .max_by { |r| r[:minimum_distance] }
+                             .fetch(:minimum_distance)
+
+
+      (distance.to_f - lower_bound) / 
+        (@regions.select { |r| distance < r[:minimum_distance] }
+                .min_by { |r| r[:minimum_distance] }
+                .fetch(:minimum_distance) - lower_bound)
     end
 
     private
 
-    attr_writer :current_position
-    
-    def random_minefield_position
-      angle  = rand(0..2*Math::PI)
-      length = rand(MINE_FIELD_RANGE)
-
-      x = length*Math.cos(angle)
-      y = length*Math.sin(angle)
-
-      Blind::Point.new(x.to_i,y.to_i)
-    end
+    attr_writer :reference_point
   end
 end

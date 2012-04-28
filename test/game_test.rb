@@ -1,10 +1,13 @@
 require_relative "helper"
 require_relative "../lib/blind/game"
 require_relative "../lib/blind/world"
+require_relative "../config/worlds"
 
 describe Blind::Game do
-  # NOTE: use just one mine to make testing easier
-  let(:world) { Blind::World.new(1) }
+  let(:world) do
+    file = "#{File.dirname(__FILE__)}/fixtures/world.dump" 
+    Marshal.load(File.binread(file))
+  end
 
   let(:game)  { Blind::Game.new(world) }
 
@@ -40,7 +43,7 @@ describe Blind::Game do
 
     game.on_event(:mine_detonated) { detonated = true }
 
-    mine = world.mine_positions.first
+    mine = world.positions.first(:mine)
 
     game.move(mine.x - Blind::Game::MINE_DETONATION_RANGE, mine.y)
 
@@ -56,7 +59,7 @@ describe Blind::Game do
     
     game.on_event(:exit_located) { exit_located = true }
 
-    exit_pos = world.exit_position
+    exit_pos = world.positions.first(:exit)
 
     game.move(exit_pos.x, exit_pos.y + Blind::Game::EXIT_ACTIVATION_RANGE)
 

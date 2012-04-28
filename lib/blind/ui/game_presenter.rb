@@ -6,16 +6,26 @@ require_relative "juke_box"
 module Blind
   module UI
     class GamePresenter
-      def initialize(mine_count=40)
-        @world  = Blind::World.new(mine_count)
-        @game   = Blind::Game.new(@world)
-        @sounds = {}
-   
+      def initialize(levels)
+        # FIXME: stopgap measure, should be non-destruction
+        @levels        = Marshal.load(Marshal.dump(levels))
+        load_new_level
+      end
+
+      attr_accessor :message, :current_level
+
+      def load_new_level
+        @current_level  = @levels.shift
+
+        @world   = current_level.world
+        @game    = Blind::Game.new(@world)
+        @message = current_level.message   
+
+        @sounds  = {}
+
         setup_sounds
         setup_events
       end
-
-      attr_reader :game_over_message
 
       def move(x,y)
         game.move(x,y)
@@ -23,40 +33,37 @@ module Blind
 
       def detect_danger_zone
         if in_danger_zone
-          min = Blind::World::DANGER_ZONE_RANGE.min
-          max = Blind::World::DANGER_ZONE_RANGE.max
-
-          sounds[:siren].volume = 
-            ((world.distance(world.center_position) - min) / max.to_f) * 100
+          sounds[:siren].volume =  world.regional_depth * 100
         else
           sounds[:siren].volume = 0
         end
       end
 
       def to_s
-        "Player position #{world.current_position}\n"+
+        "Player position #{world.reference_point}\n"+
         "Region #{world.current_region}\n"+
-        "Mines\n #{world.mine_positions.each_slice(5)
-                         .map { |e| e.join(", ") }.join("\n")}\n"+
-        "Exit\n #{world.exit_position}"
+        "Mines\n #{world.positions.all(:mine)
+                        .each_slice(5)
+                        .map { |e| e.join(", ") }.join("\n")}\n"+
+        "Exit\n #{world.positions.first(:exit)}"
       end
 
       def player_position
-        world.current_position
+        world.reference_point
       end
 
       def finished?
-        !!game_over_message
+        finished
       end
 
       private
 
       def setup_sounds
-        sounds[:phone]       = JukeBox.phone(@game.world.exit_position)
+        sounds[:phone]       = JukeBox.phone(@game.world.positions.first(:exit))
         sounds[:siren]       = JukeBox.siren
         sounds[:explosion]   = JukeBox.explosion
         sounds[:celebration] = JukeBox.celebration
-        sounds[:mines]       = JukeBox.mines(@game.world.mine_positions)
+        sounds[:mines]       = JukeBox.mines(@game.world.positions.all(:mine))
       end
 
       def setup_events
@@ -87,7 +94,9 @@ module Blind
         sound = sounds[:explosion]
         sound.play
 
-        self.game_over_message = message
+        self.message  = message
+
+        self.finished = true
       end
 
       def win_game(message)
@@ -96,7 +105,13 @@ module Blind
         sound = sounds[:celebration]
         sound.play
 
-        self.game_over_message = message
+        self.message  = message
+
+        if @levels.empty?
+          self.finished = true
+        else
+          load_new_level
+        end
       end
 
       def silence_sounds
@@ -112,10 +127,9 @@ module Blind
 
       private 
 
-      attr_accessor :in_danger_zone
+      attr_accessor :in_danger_zone, :finished
 
       attr_reader :sounds, :world, :game
-      attr_writer :game_over_message
     end
   end
 end
