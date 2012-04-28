@@ -25,12 +25,12 @@ module Blind
         "But beware not to stray too far, if you hear\n"+
         "sirens, head back where you came from"),
        Blind::Level.new(
-         Blind::Worlds.original(0),
+         Blind::Worlds.original(5),
          "Now you're ready to ramp things up a bit\n"+
          "Avoid the beeping mines, they'll blast you\n"+
          "if you get too close to them!"),
        Blind::Level.new(
-         Blind::Worlds.original(0),
+         Blind::Worlds.original(30),
          "Good job buddy! Now you're ready for the real deal.\n"+
          "There are a LOT more mines now, so watch out!"),
        Blind::Level.new(
