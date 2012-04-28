@@ -55,7 +55,7 @@ module Blind
       end
 
       def status
-        scene.message
+        scene.game.message
       end
     end
   end

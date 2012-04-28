@@ -53,8 +53,6 @@ num_mines = options[:num_mines]
 
 world   = Blind::Worlds.send(options[:map], num_mines)
 game    = Blind::UI::GamePresenter.new(world)
-message = "Find the phone, avoid the beeping mines and the sirens\n"+
-          "(Use WASD keys to move)"
 
 Ray::Audio.pos = [0,0,0]
 
@@ -62,6 +60,5 @@ game_runner = Blind::UI::GameRunner.new
 
 scene         = game_runner.registered_scene(:main)
 scene.game    = game
-scene.message = message
 
 game_runner.run

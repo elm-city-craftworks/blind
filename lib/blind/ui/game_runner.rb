@@ -5,21 +5,13 @@ module Blind
     class MainScene < Ray::Scene
       scene_name :main
 
-      attr_accessor :game, :message, :mine_count
-
-      def setup
-        self.message = 
-          "Find the phone, avoid the beeping mines and the sirens\n"+
-          "(Use WASD keys to move)"
-      end
+      attr_accessor :game, :mine_count
 
       def register
         self.frames_per_second = 20
 
         always do
-          if game.finished?
-            self.message = game.message
-          else
+          unless game.finished?
             game.detect_danger_zone
             
             game.move( 0.0, -0.1)  if holding?(:w) 
@@ -35,7 +27,7 @@ module Blind
       end
 
       def render(win)
-        win.draw(text(message, :size => 20, :at => [30,30]))
+        win.draw(text(game.message, :size => 20, :at => [30,30]))
         win.draw(text(game.to_s, :at => [30, 200])) if $DEBUG
       end
     end

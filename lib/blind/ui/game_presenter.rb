@@ -7,9 +7,12 @@ module Blind
   module UI
     class GamePresenter
       def initialize(world)
-        @world  = world
-        @game   = Blind::Game.new(@world)
-        @sounds = {}
+        @world   = world
+        @game    = Blind::Game.new(@world)
+        @sounds  = {}
+
+        @message = "Find the phone, avoid the beeping mines and the sirens\n"+
+                   "(Use WASD keys to move)"
    
         setup_sounds
         setup_events
@@ -43,7 +46,7 @@ module Blind
       end
 
       def finished?
-        !!message
+        finished
       end
 
       private
@@ -84,7 +87,8 @@ module Blind
         sound = sounds[:explosion]
         sound.play
 
-        self.message = message
+        self.message  = message
+        self.finished = true
       end
 
       def win_game(message)
@@ -93,7 +97,8 @@ module Blind
         sound = sounds[:celebration]
         sound.play
 
-        self.message = message
+        self.message  = message
+        self.finished = true
       end
 
       def silence_sounds
@@ -109,7 +114,7 @@ module Blind
 
       private 
 
-      attr_accessor :in_danger_zone
+      attr_accessor :in_danger_zone, :finished
 
       attr_reader :sounds, :world, :game
     end
