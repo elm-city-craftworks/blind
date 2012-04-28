@@ -4,7 +4,7 @@ require 'ray'
 require 'optparse'
 
 require_relative "../lib/blind"
-require_relative "../config/worlds"
+require_relative "../config/games"
 
 # Optionally set the number of mines in the game.
 # If an argument is not provided, the game will create 30 mines by default
@@ -50,13 +50,7 @@ num_mines = options[:num_mines]
 
 # Take care of some initial boilerplate for the game
 
-world   = Blind::Worlds.send(options[:map], num_mines)
-
-levels = (1..3).map do |i|
-  Blind::Level.new(Blind::Worlds.trivial(0), "test #{i}")
-end
-
-game = Blind::UI::GamePresenter.new(levels)
+game = Blind::UI::GamePresenter.new(Blind::Games.cramped)
 
 Ray::Audio.pos = [0,0,0]
 

@@ -96,11 +96,7 @@ module Blind
 
         self.message  = message
 
-        if @levels.empty?
-          self.finished = true
-        else
-          load_new_level
-        end
+        self.finished = true
       end
 
       def win_game(message)
