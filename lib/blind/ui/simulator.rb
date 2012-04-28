@@ -34,8 +34,16 @@ module Blind
           scene.window.input.press(Ray::Event::KeyW)
         end
 
-        while scene.game.player_position.distance(Blind::Point.new(x,y)) > 1
-          if scene.game.finished?
+        original_level = scene.game.current_level
+
+        while scene.game.player_position.distance(Blind::Point.new(x,y)) 
+          if scene.game.current_level != original_level
+            scene.window.input.release(Ray::Event::KeyD)
+            scene.window.input.release(Ray::Event::KeyA)
+            scene.window.input.release(Ray::Event::KeyW)
+            scene.window.input.release(Ray::Event::KeyS)
+            break
+          elsif scene.game.finished?
             scene.run_tick
             break
           end

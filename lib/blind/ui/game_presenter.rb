@@ -7,19 +7,25 @@ module Blind
   module UI
     class GamePresenter
       def initialize(levels)
-        @levels        = levels
-        current_level  = @levels.shift
+        # FIXME: stopgap measure, should be non-destruction
+        @levels        = Marshal.load(Marshal.dump(levels))
+        load_new_level
+      end
+
+      attr_accessor :message, :current_level
+
+      def load_new_level
+        @current_level  = @levels.shift
 
         @world   = current_level.world
         @game    = Blind::Game.new(@world)
+        @message = current_level.message   
+
         @sounds  = {}
 
-        @message = current_level.message   
         setup_sounds
         setup_events
       end
-
-      attr_accessor :message
 
       def move(x,y)
         game.move(x,y)
@@ -89,7 +95,12 @@ module Blind
         sound.play
 
         self.message  = message
-        self.finished = true
+
+        if @levels.empty?
+          self.finished = true
+        else
+          load_new_level
+        end
       end
 
       def win_game(message)
@@ -99,7 +110,12 @@ module Blind
         sound.play
 
         self.message  = message
-        self.finished = true
+
+        if @levels.empty?
+          self.finished = true
+        else
+          load_new_level
+        end
       end
 
       def silence_sounds
