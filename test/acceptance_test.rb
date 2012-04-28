@@ -12,8 +12,10 @@ describe "The full game" do
 
 
   it "should result in a loss on mine collision" do
-    world = Blind::Worlds.original(1)
-    game  = Blind::UI::GamePresenter.new(world)
+    world  = Blind::Worlds.original(1)
+    levels = [Blind::Level.new(world, "test")]
+
+    game  = Blind::UI::GamePresenter.new(levels)
 
     sim   = Blind::UI::Simulator.new(game)
 
@@ -25,8 +27,10 @@ describe "The full game" do
   end
 
   it "should result in a loss on entering deep space" do
-    world = Blind::Worlds.original(0)
-    game  = Blind::UI::GamePresenter.new(world)
+    world  = Blind::Worlds.original(0)
+    levels = [Blind::Level.new(world, "test")]
+
+    game  = Blind::UI::GamePresenter.new(levels)
 
     sim   = Blind::UI::Simulator.new(game)
 
@@ -36,8 +40,10 @@ describe "The full game" do
   end
 
   it "should result in a win when the exit location is reached" do
-    world = Blind::Worlds.original(0)
-    game  = Blind::UI::GamePresenter.new(world)
+    world  = Blind::Worlds.original(0)
+    levels = [Blind::Level.new(world, "test")]
+
+    game  = Blind::UI::GamePresenter.new(levels)
 
     sim   = Blind::UI::Simulator.new(game)
 

@@ -4,7 +4,6 @@ require 'ray'
 require 'optparse'
 
 require_relative "../lib/blind"
-require_relative "../lib/blind/ui/game_runner"
 require_relative "../config/worlds"
 
 # Optionally set the number of mines in the game.
@@ -52,7 +51,11 @@ num_mines = options[:num_mines]
 # Take care of some initial boilerplate for the game
 
 world   = Blind::Worlds.send(options[:map], num_mines)
-game    = Blind::UI::GamePresenter.new(world)
+levels  = [ Blind::Level.new(world, 
+  "Find the phone, avoid the beeping mines and the sirens\n"+
+  "(Use WASD keys to move around)") ]
+
+game = Blind::UI::GamePresenter.new(levels)
 
 Ray::Audio.pos = [0,0,0]
 

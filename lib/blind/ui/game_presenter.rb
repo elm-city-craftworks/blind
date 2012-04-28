@@ -6,14 +6,15 @@ require_relative "juke_box"
 module Blind
   module UI
     class GamePresenter
-      def initialize(world)
-        @world   = world
+      def initialize(levels)
+        @levels        = levels
+        current_level  = @levels.shift
+
+        @world   = current_level.world
         @game    = Blind::Game.new(@world)
         @sounds  = {}
 
-        @message = "Find the phone, avoid the beeping mines and the sirens\n"+
-                   "(Use WASD keys to move)"
-   
+        @message = current_level.message   
         setup_sounds
         setup_events
       end
